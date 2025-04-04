@@ -1,0 +1,40 @@
+services:
+  backend:
+    build: ../backend
+    volumes:
+      - ../backend:/usr/scr/app
+      - /app/node_modules
+    env_file:
+      - .env.backend
+    ports:
+      - "8888:8888"
+    command: sh -c "npm run setup && npm run dev"
+    networks:
+      - server-mongo
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ../frontend
+    volumes:
+      - ../frontend:/usr/scr/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.frontend
+    depends_on:
+      - backend
+    
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - server-mongo
+
+volumes:
+  mongodb_data:
+
+networks:
+  server-mongo:
