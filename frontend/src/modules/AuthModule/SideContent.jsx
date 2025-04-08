@@ -1,13 +1,10 @@
-import { Space, Layout, Divider, Typography } from 'antd';
-import logo from '@/style/images/idurar-crm-erp.svg';
-import useLanguage from '@/locale/useLanguage';
-import { useSelector } from 'react-redux';
+import { Layout, Typography } from 'antd';
+import logo from '@/style/images/stratobuild-logo.svg';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
 export default function SideContent() {
-  const translate = useLanguage();
 
   return (
     <Content
@@ -22,10 +19,10 @@ export default function SideContent() {
       <div style={{ width: '100%' }}>
         <img
           src={logo}
-          alt="IDURAR ERP CRM"
-          style={{ margin: '0 0 40px', display: 'block' }}
+          alt="STRATOBUILD ERP"
+          style={{ margin: '0 0 0 -350px', display: 'block' }}
           height={63}
-          width={220}
+          width={1000}
         />
 
         <Title level={1} style={{ fontSize: 28 }}>
