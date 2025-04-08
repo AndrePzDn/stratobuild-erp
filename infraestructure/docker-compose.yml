@@ -1,0 +1,71 @@
+services:
+  backend:
+    build: ../backend
+    volumes:
+      - ../backend:/usr/scr/app
+      - backend_node_modules:/usr/src/app/node_modules
+    env_file:
+      - .env.backend
+    ports:
+      - "8888:8888"
+    command: sh -c "npm run setup && npm run dev"
+    networks:
+      - server-mongo
+    depends_on:
+      - mongo
+      - grafana
+
+  frontend:
+    build: ../frontend
+    volumes:
+      - ../frontend:/usr/src/app
+      - frontend_node_modules:/usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.frontend
+    depends_on:
+      - backend
+    
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - server-mongo
+
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+      - ./clickhouse/config/:/etc/clickhouse-server/users.d/
+    environment:
+      - CLICKHOUSE_DB=default
+    ulimits:
+      nofile:
+        soft: 262144 
+        hard: 262144 
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    ports:
+      - "5000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - clickhouse
+
+volumes:
+  mongodb_data:
+  backend_node_modules:
+  frontend_node_modules:
+  clickhouse-data:
+  grafana_data:
+
+networks:
+  server-mongo:
