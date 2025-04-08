@@ -5,7 +5,7 @@ import { Layout, Col, Divider, Typography } from 'antd';
 import AuthLayout from '@/layout/AuthLayout';
 import SideContent from './SideContent';
 
-import logo from '@/style/images/idurar-crm-erp.svg';
+import logo from '@/style/images/stratobuild-logo.svg';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -26,11 +26,11 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
             src={logo}
             alt="Logo"
             style={{
-              margin: '0px auto 20px',
+              margin: '0px auto 20px -200px',
               display: 'block',
             }}
             height={63}
-            width={220}
+            width={700}
           />
           <div className="space10" />
         </Col>
