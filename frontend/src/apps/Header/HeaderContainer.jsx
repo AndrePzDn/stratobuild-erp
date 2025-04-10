@@ -12,7 +12,7 @@ import { FILE_BASE_URL } from '@/config/serverApiConfig';
 
 import useLanguage from '@/locale/useLanguage';
 
-import UpgradeButton from './UpgradeButton';
+import SelectLanguage from '@/components/SelectLanguage';
 
 export default function HeaderContent() {
   const currentAdmin = useSelector(selectCurrentAdmin);
@@ -120,14 +120,9 @@ export default function HeaderContent() {
         </Avatar>
         {/* </Badge> */}
       </Dropdown>
+      <SelectLanguage />
 
       {/* <AppsButton /> */}
-
-      <UpgradeButton />
     </Header>
   );
 }
-
-//  console.log(
-//    '🚀 Welcome to IDURAR ERP CRM! Did you know that we also offer commercial customization services? Contact us at hello@idurarapp.com for more information.'
-//  );

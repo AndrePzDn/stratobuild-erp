@@ -1,14 +1,11 @@
-import { Space, Layout, Divider, Typography } from 'antd';
-import logo from '@/style/images/idurar-crm-erp.svg';
-import useLanguage from '@/locale/useLanguage';
-import { useSelector } from 'react-redux';
+import { Layout, Typography } from 'antd';
+import logo from '@/style/images/stratobuild-logo.svg';
+import guy from '@/style/images/construction-guy.svg';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
 export default function SideContent() {
-  const translate = useLanguage();
-
   return (
     <Content
       style={{
@@ -22,18 +19,20 @@ export default function SideContent() {
       <div style={{ width: '100%' }}>
         <img
           src={logo}
-          alt="IDURAR ERP CRM"
-          style={{ margin: '0 0 40px', display: 'block' }}
+          alt="STRATOBUILD ERP"
+          style={{ margin: '0 0 0 -350px', display: 'block' }}
           height={63}
-          width={220}
+          width={1000}
         />
 
         <Title level={1} style={{ fontSize: 28 }}>
-          Free Open Source ERP / CRM
+          Smart construction, without limits
         </Title>
         <Text>
-          Accounting / Invoicing / Quote App <b /> based on Node.js React.js Ant Design
+          Building Smarter, Achieving More, Streamline Your Workflow and Amplify Your Success with
+          Strato Build
         </Text>
+        <img src={guy} alt="Construction Guy" style={{ margin: '-30px 0px 0 -20px' }} />
 
         <div className="space20"></div>
       </div>
