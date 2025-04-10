@@ -1,11 +1,11 @@
 import { Layout, Typography } from 'antd';
 import logo from '@/style/images/stratobuild-logo.svg';
+import guy from '@/style/images/construction-guy.svg';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
 export default function SideContent() {
-
   return (
     <Content
       style={{
@@ -26,11 +26,13 @@ export default function SideContent() {
         />
 
         <Title level={1} style={{ fontSize: 28 }}>
-          Free Open Source ERP / CRM
+          Smart construction, without limits
         </Title>
         <Text>
-          Accounting / Invoicing / Quote App <b /> based on Node.js React.js Ant Design
+          Building Smarter, Achieving More, Streamline Your Workflow and Amplify Your Success with
+          Strato Build
         </Text>
+        <img src={guy} alt="Construction Guy" style={{ margin: '-30px 0px 0 -20px' }} />
 
         <div className="space20"></div>
       </div>
