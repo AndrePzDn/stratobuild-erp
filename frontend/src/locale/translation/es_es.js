@@ -4,8 +4,7 @@ const lang = {
   all_in_one_tool: 'Una herramienta todo en uno',
   run_and_scale_your_erp_crm_apps: 'Ejecuta y escala tus aplicaciones ERP y CRM',
   easily_add_and_manage_your_services: 'Agrega y administra tus servicios fácilmente',
-  it_brings_together_your_invoice_clients_and_leads:
-    'Reúne tus facturas, clientes y oportunidades',
+  it_brings_together_your_invoice_clients_and_leads: 'Reúne tus facturas, clientes y oportunidades',
   select_language: 'Seleccionar idioma',
   register: 'Registrar',
   or: 'O',
@@ -316,7 +315,7 @@ const lang = {
   type: 'Tipo',
   phone: 'Teléfono',
   refresh: 'Actualizar',
-  are_you_sure_you_want_to_delete: '¿Estás seguro de que deseas eliminar',
+  are_you_sure_you_want_to_delete: '¿Estás seguro de que deseas eliminar ',
   delete_confirmation: 'Confirmación de eliminación',
   remove: 'Quitar',
   cancel: 'Cancelar',
@@ -367,8 +366,7 @@ const lang = {
   select_tax_value: 'Selecciona el valor del impuesto',
   add_field: 'Agregar campo',
   error_404: 'Error 404',
-  sorry_the_page_you_requested_does_not_exist:
-    'Lo sentimos, la página que solicitaste no existe',
+  sorry_the_page_you_requested_does_not_exist: 'Lo sentimos, la página que solicitaste no existe',
   back: 'Atrás',
   download_pdf: 'Descargar PDF',
   send_by_email: 'Enviar por correo',
@@ -430,8 +428,7 @@ const lang = {
   default_mode: 'Modo por defecto',
   value: 'Valor',
   taxes_list: 'Lista de impuestos',
-  do_you_need_help_on_customize_of_this_app:
-    '¿Necesitas ayuda para personalizar esta aplicación?',
+  do_you_need_help_on_customize_of_this_app: '¿Necesitas ayuda para personalizar esta aplicación?',
   contact_us: 'Contáctanos',
   customers: 'Clientes',
   peoples: 'Personas',
@@ -451,7 +448,22 @@ const lang = {
   enter_code: 'Ingresa el código',
   offers: 'Ofertas',
   proforma_invoices: 'Proformas',
-  search: 'Buscar'
+  search: 'Buscar',
+  project_management: 'Gestion Proyectos',
+  projects: 'Proyectos',
+  planning: 'Planeacion',
+  budget: 'Presupuestos',
+  reports: 'Reportes',
+  certifications: 'Certificaciones',
+  service_category: 'Servicios',
+  project_category: 'Categoria Proyectos',
+  client_services: 'Servicios Cliente',
+  billings: 'Facturacion',
+  resource_management: 'Gestion Recursos',
+  resources: 'Recursos',
+  unit_of_measurement: 'Unidad de medida',
+  suppliers: 'Proovedores',
+  admin_users: 'Administrar Usuarios',
 };
 
 export default lang;
