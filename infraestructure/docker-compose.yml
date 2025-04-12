@@ -2,13 +2,13 @@ services:
   backend:
     build: ../backend
     volumes:
-      - ../backend:/usr/scr/app
+      - ../backend:/usr/src/app
       - backend_node_modules:/usr/src/app/node_modules
     env_file:
       - .env.backend
     ports:
       - "8888:8888"
-    command: sh -c "npm run setup && npm run dev"
+    command: sh -c "npm run dev"
     networks:
       - server-mongo
     depends_on:
@@ -29,6 +29,8 @@ services:
     
   mongo:
     image: mongo:latest
+    ports:
+      - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     networks:
