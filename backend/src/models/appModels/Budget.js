@@ -1,65 +1,59 @@
 const mongoose = require('mongoose');
 
+const BudgetStatusEnum = ['draft', 'pending', 'approved', 'rejected', 'in_progress', 'done'];
+
 const schema = new mongoose.Schema({
-  created: {
-    type: Date,
-    default: Date.now,
-  },
-  updated: {
-    type: Date,
-    default: Date.now,
-  },
-  removed: {
-    type: Boolean,
-    default: false,
-  },
-  enabled: {
-    type: Boolean,
-    default: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  createdBy: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Admin',
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
+  created: { type: Date, default: Date.now },
+  updated: { type: Date, default: Date.now },
+  removed: { type: Boolean, default: false },
+
+  converted: { type: Boolean, default: false },
+  approved: { type: Boolean, default: false },
+
+  name: { type: String, required: true },
+  note: { type: String },
+  date: { type: Date, required: true },
+  status: { type: String, enum: BudgetStatusEnum, default: 'draft' },
+  amountPaid: { type: Number, default: 0 },
+
+  taxRate: { type: Number },
+  subTotal: { type: Number },
+  taxTotal: { type: Number },
+  total: { type: Number },
+
+  items: [
+    {
+      priceBank: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'PriceBank',
+        autopopulate: true,
+      },
+      quantity: { type: Number },
+      total: { type: Number },
+    },
+  ],
+
   currency: {
     type: mongoose.Schema.ObjectId,
     ref: 'Currency',
     autopopulate: true,
+    required: false,
   },
-  total: {
-    type: Number,
-    required: true,
+  created_by: { type: mongoose.Schema.ObjectId, ref: 'Admin', autopopulate: true, required: true },
+  quote: { type: mongoose.Schema.ObjectId, ref: 'Quote', autopopulate: true, required: true },
+  client: { type: mongoose.Schema.ObjectId, ref: 'Client', autopopulate: true, required: true },
+  serviceType: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'ServiceType',
+    autopopulate: true,
   },
-  paid: {
-    type: Number,
-    default: 0,
+  projectType: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'ProjectType',
+    autopopulate: true,
   },
-  resourceList: [
-    {
-      material: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Resource',
-        autopopulate: true,
-      },
-      quantity: {
-        type: Number,
-        required: true,
-      },
-      total: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
 });
+
+schema.plugin(require('mongoose-autopopulate'));
 
 module.exports = mongoose.model('Budget', schema);

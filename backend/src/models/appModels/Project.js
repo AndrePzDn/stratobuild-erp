@@ -1,60 +1,33 @@
 const mongoose = require('mongoose');
 
-const projectStatusEnum = ['active', 'inactive', 'completed', 'in_progress', 'on_hold'];
+const ProjectEnum = ['active', 'inactive', 'completed', 'in_progress', 'on_hold'];
 
 const schema = new mongoose.Schema({
-  created: {
-    type: Date,
-    default: Date.now,
-  },
-  updated: {
-    type: Date,
-    default: Date.now,
-  },
-  removed: {
-    type: Boolean,
-    default: false,
-  },
-  enabled: {
-    type: Boolean,
-    default: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: projectStatusEnum,
-    default: 'active',
-  },
-  certifications: {
-    type: [mongoose.Schema.ObjectId],
-    default: [],
-  },
-  projectCategory: {
+  created: { type: Date, default: Date.now },
+  updated: { type: Date, default: Date.now },
+  removed: { type: Boolean, default: false },
+
+  name: { type: String, required: true },
+  location: { type: String },
+  status: { type: String, enum: ProjectEnum, required: true, default: 'active' },
+  startDate: { type: Date, default: Date.now },
+  estimatedPrice: { type: Number, default: 0 },
+  endDate: { type: Date },
+
+  createdBy: { type: mongoose.Schema.ObjectId, ref: 'Admin', autopopulate: true, required: true },
+  client: { type: mongoose.Schema.ObjectId, ref: 'Client', autopopulate: true, required: true },
+  budget: { type: mongoose.Schema.ObjectId, ref: 'Budget', autopopulate: true, required: true },
+  serviceType: {
     type: mongoose.Schema.ObjectId,
-    ref: 'ProjectCategory',
-    required: true,
+    ref: 'ServiceType',
     autopopulate: true,
+    required: true,
   },
-  serviceCategory: {
+  projectType: {
     type: mongoose.Schema.ObjectId,
-    ref: 'ServiceCategory',
-    required: true,
+    ref: 'ProjectType',
     autopopulate: true,
-  },
-  client: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Client',
     required: true,
-    autopopulate: true,
-  },
-  budget: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Budget',
-    required: true,
-    autopopulate: true,
   },
 });
 
