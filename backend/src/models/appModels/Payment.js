@@ -1,62 +1,26 @@
 const mongoose = require('mongoose');
 
-const paymentSchema = new mongoose.Schema({
-  removed: {
-    type: Boolean,
-    default: false,
-  },
+const PaymentTypeEnum = ['income', 'expense'];
 
-  createdBy: { type: mongoose.Schema.ObjectId, ref: 'Admin', autopopulate: true, required: true },
-  number: {
-    type: Number,
-    required: true,
-  },
-  client: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Client',
-    autopopulate: true,
-    required: true,
-  },
-  invoice: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Invoice',
-    required: true,
-    autopopulate: true,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-  },
+const schema = new mongoose.Schema({
+  created: { type: Date, default: Date.now },
+  updated: { type: Date, default: Date.now },
+  removed: { type: Boolean, default: false },
+
+  description: { type: String, required: true },
+  amount: { type: Number, required: true },
+  date: { type: Date, required: true },
+  paymentType: { type: String, enum: PaymentTypeEnum, required: true },
+
   currency: {
-    type: String,
-    default: 'NA',
-    uppercase: true,
-    required: true,
-  },
-  paymentMode: {
     type: mongoose.Schema.ObjectId,
-    ref: 'PaymentMode',
+    ref: 'Currency',
     autopopulate: true,
+    required: false,
   },
-  ref: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
-  updated: {
-    type: Date,
-    default: Date.now,
-  },
-  created: {
-    type: Date,
-    default: Date.now,
-  },
+  cashFlow: { type: mongoose.Schema.ObjectId, ref: 'CashFlow', autopopulate: true, required: true },
 });
-paymentSchema.plugin(require('mongoose-autopopulate'));
-module.exports = mongoose.model('Payment', paymentSchema);
+
+schema.plugin(require('mongoose-autopopulate'));
+
+module.exports = mongoose.model('Payment', schema);
