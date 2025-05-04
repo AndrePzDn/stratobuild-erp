@@ -1,21 +1,19 @@
+const mongoose = require('mongoose');
 const createCRUDController = require('@/controllers/middlewaresControllers/createCRUDController');
 const methods = createCRUDController('Quote');
 
-const sendMail = require('./sendMail');
 const create = require('./create');
-const summary = require('./summary');
 const update = require('./update');
-const convertQuoteToInvoice = require('./convertQuoteToInvoice');
-const paginatedList = require('./paginatedList');
-const read = require('./read');
+const convert = require('./convertQuoteToBudget');
 
-methods.list = paginatedList;
-methods.read = read;
+function modelController() {
+  const Model = mongoose.model('Quote');
+  const methods = createCRUDController('Quote');
 
-methods.mail = sendMail;
-methods.create = create;
-methods.update = update;
-methods.convert = convertQuoteToInvoice;
-methods.summary = summary;
+  methods.create = (req, res) => create(Model, req, res);
+  methods.update = (req, res) => update(Model, req, res);
+  methods.convert = (req, res) => convert(Model, req, res);
+  return methods;
+}
 
-module.exports = methods;
+module.exports = modelController();
