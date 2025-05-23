@@ -1,0 +1,7 @@
+pymongo
+clickhouse-connect
+pandas
+pydantic
+python-dotenv
+loguru
+schedule
