@@ -1,6 +1,6 @@
 const paginatedList = async (Model, req, res) => {
   const page = req.query.page || 1;
-  const limit = parseInt(req.query.items) || 10;
+  const limit = parseInt(req.query.items) || 1000;
   const skip = page * limit - limit;
 
   const { sortBy = 'enabled', sortValue = -1, filter, equal } = req.query;
@@ -16,7 +16,7 @@ const paginatedList = async (Model, req, res) => {
   }
 
   //  Query the database for a list of all results
-  const resultsPromise = Model.find({
+  const resultsPromise = await Model.find({
     removed: false,
 
     [filter]: equal,
