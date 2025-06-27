@@ -12,7 +12,6 @@ import CurrencyPage from "./pages/Currency/CurrencyPage";
 import QuotePage from "./pages/Quote/QuotePage";
 import BudgetPage from "./pages/Budget/BudgetPage";
 import ProjectPage from "./pages/Project/ProjectPage";
-import Example from "./Example";
 import PlanningPage from "./pages/Planning/PlanningPage";
 import PaymentsPage from "./pages/Payments/PaymentsPage";
 
@@ -25,7 +24,6 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<HomePage />} />
-            <Route path="/test" element={<Example />} />
             <Route path="/budget" element={<BudgetPage />} />
             <Route path="/certification" element={<>Hola</>} />
             <Route path="/service/project" element={<>Hola</>} />

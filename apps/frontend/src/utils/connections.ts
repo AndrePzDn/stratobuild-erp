@@ -1,10 +1,10 @@
 import type { LoginFormValues } from "@/schemas/Login.schema";
 import axios from "axios"
 
-const BASE_URL = "http://localhost:8888/api";
+const BASE_URL = "/api";
 
 export const loginUser = (values: LoginFormValues) => {
-  return axios.post(`${BASE_URL}/login?timestamp=${new Date().getTime()}`, values)
+  return axios.post(`${BASE_URL}/login?timestamp=${new Date().getTime()}`, values);
 }
 
 export const readEntity = (entity: string, id: string, token: string) => {
