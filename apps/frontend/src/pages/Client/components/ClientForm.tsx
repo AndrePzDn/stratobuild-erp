@@ -22,7 +22,7 @@ export default function ClientFormFields() {
   }, [setValue, user]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <FormField
         control={control}
         name="name"

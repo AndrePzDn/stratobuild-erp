@@ -7,7 +7,7 @@ export default function TaskFormValues() {
   const { control } = useFormContext();
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col">
       <InputFormField
         control={control}
         name="name"

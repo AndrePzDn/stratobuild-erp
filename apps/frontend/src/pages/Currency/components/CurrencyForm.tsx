@@ -6,7 +6,7 @@ export default function CurrencyFieldValues() {
   const { control } = useFormContext();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <InputFormField
         control={control}
         label="Nombre"

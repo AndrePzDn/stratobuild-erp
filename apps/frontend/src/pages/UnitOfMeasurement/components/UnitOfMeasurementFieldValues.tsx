@@ -13,7 +13,7 @@ export default function UnitOfMeasurementFieldValues() {
   const { control } = useFormContext();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <FormField
         control={control}
         name="name"

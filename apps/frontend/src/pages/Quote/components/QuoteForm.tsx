@@ -54,7 +54,7 @@ export default function QuoteFieldValues() {
   }, [watchedItems]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <section className="grid grid-cols-2 gap-4 items-start">
         <InputFormField name="name" label="Nombre" control={control} />
         <InputFormField name="note" label="Nota" control={control} />

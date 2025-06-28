@@ -58,7 +58,7 @@ export default function BudgetFieldValues() {
   ];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <section className="grid grid-cols-2 gap-4">
         <InputFormField
           control={control}
