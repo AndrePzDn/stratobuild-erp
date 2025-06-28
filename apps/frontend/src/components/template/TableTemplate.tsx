@@ -1,3 +1,4 @@
+import type z from "zod";
 import {
   Table,
   TableBody,
@@ -6,9 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import FormDialog from "@/pages/Client/components/FormDialog";
+
 import { EllipsisVertical, Plus } from "lucide-react";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+
 import {
   convertEntity,
   deleteEntity,
@@ -16,16 +25,11 @@ import {
   patchEntity,
   postEntity,
 } from "@/utils/connections";
-import { useAuthStore } from "@/stores/authStore";
-import FormDialog from "@/pages/Client/components/FormDialog";
-import type z from "zod";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+
 import { normalizeItemToEdit } from "@/utils/normalizeFields";
+
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useAuthStore } from "@/stores/authStore";
 
 interface TableHeadProps {
   label: string;
@@ -193,7 +197,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   }, [fetchData]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 bg-table-background rounded-md text-table-foreground">
       <nav className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{`Lista de ${config.labelName}`}</h1>
         {canBeCreated && schema && (
@@ -212,10 +216,10 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
         )}
       </nav>
 
-      <div className="p-4 border border-black/20 rounded-md">
+      <div className="border border-black/30 rounded-md bg-white text-black max-h-[85dvh] min-h-[85dvh] overflow-y-auto">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-50">
+            <TableRow className="bg-primary text-primary-foreground">
               {config.tableHead.map((header, i) => (
                 <TableHead key={i} className="font-semibold">
                   {header.label}
@@ -232,7 +236,46 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                     key={i}
                     className="max-w-3xs whitespace-normal break-words"
                   >
-                    {getNestedValue(item, header.name)}
+                    {(() => {
+                      const value = getNestedValue(item, header.name);
+                      switch (header.type) {
+                        case "date":
+                          return value
+                            ? new Date(value).toLocaleDateString()
+                            : "";
+                        case "boolean":
+                          return (
+                            <span className="text-sm">
+                              {value ? "Sí" : "No"}
+                            </span>
+                          );
+                        case "currency":
+                          return (
+                            <span className="text-sm">
+                              {typeof value === "number"
+                                ? value.toLocaleString("es-ES", {
+                                    style: "currency",
+                                    currency: "EUR",
+                                  })
+                                : value}
+                            </span>
+                          );
+                        case "number":
+                          return (
+                            <span className="text-sm">
+                              {typeof value === "number" ? value : ""}
+                            </span>
+                          );
+                        case "array":
+                          return (
+                            <span className="text-sm">
+                              {Array.isArray(value) ? value.join(", ") : ""}
+                            </span>
+                          );
+                        default:
+                          return <span className="text-sm">{value}</span>;
+                      }
+                    })()}
                   </TableCell>
                 ))}
                 {haveOptions && (

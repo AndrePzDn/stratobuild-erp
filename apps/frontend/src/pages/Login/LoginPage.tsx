@@ -11,22 +11,24 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex h-screen">
-      <aside className="w-1/2 h-full">
-        <img
-          src={ConstructionPlan}
-          alt="StratoBuild Logo"
-          className="h-full w-full object-cover"
-        />
-      </aside>
-      <section className="w-1/2 flex items-center justify-center">
-        <div className="w-2/3">
-          <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance mb-8">
-            Iniciar Sesión
-          </h1>
+    <main className="flex h-screen items-center justify-center bg-slate-200">
+      <article className="flex w-1/2 h-2/3 shadow-lg rounded-4xl bg-white overflow-clip">
+        <figure className="flex w-full h-full">
+          <img
+            src={ConstructionPlan}
+            alt="Construction Plan"
+            className="h-full w-full object-cover"
+          />
+        </figure>
+        <section className="flex flex-col w-full items-center justify-center p-8">
+          <header>
+            <h1 className="text-center text-3xl font-extrabold tracking-tight text-balance mb-8">
+              Iniciar Sesión
+            </h1>
+          </header>
           <LoginForm />
-        </div>
-      </section>
+        </section>
+      </article>
     </main>
   );
 }

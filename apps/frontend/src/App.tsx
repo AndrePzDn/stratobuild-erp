@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ToastContainer } from "react-toastify";
 import LoginPage from "./pages/Login/LoginPage";
 import HomePage from "./pages/Home/HomePage";
 import ClientPage from "./pages/Client/ClientPage";
@@ -45,6 +46,7 @@ function App() {
             <Route path="/about" element={<>Hola</>} />
           </Route>
         </Routes>
+        <ToastContainer />
       </Suspense>
     </BrowserRouter>
   );

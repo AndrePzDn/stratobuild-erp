@@ -8,7 +8,7 @@ export default function CurrencyPage() {
       { label: "Nombre", name: "name" },
       { label: "Simbolo", name: "symbol" },
       { label: "Precio / Dolar", name: "dollarValue" },
-      { label: "Fecha Cotizacion", name: "quoteDate" },
+      { label: "Fecha Cotizacion", name: "quoteDate", type: "date" },
     ],
     labelName: "Divisas",
   };

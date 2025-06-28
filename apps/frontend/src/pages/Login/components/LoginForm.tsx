@@ -1,19 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, type LoginFormValues } from "@/schemas/Login.schema";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useForm, type FieldError, type FieldErrors } from "react-hook-form";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { loginUser } from "@/utils/connections";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/authStore";
+import { InputFormField } from "@/components/ui/input-form-field";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -21,7 +16,7 @@ export default function LoginForm() {
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
-    mode: "onBlur",
+    mode: "onSubmit",
   });
 
   const onSubmit = async (data: LoginFormValues) => {
@@ -30,45 +25,52 @@ export default function LoginForm() {
       console.log(res.data);
       login(res.data.result);
       navigate("/home");
+      toast.success("Se inició sesión correctamente", { draggable: true });
     } catch (error) {
-      console.error(error.response.data.message);
+      console.error("Login failed:", error);
+      toast.error("Error al iniciar sesión. Por favor, intente nuevamente.", { draggable: true });
     }
   };
 
+  const handleFormValidation = (
+    error: FieldErrors<Partial<LoginFormValues>>
+  ) => {
+    const errors: FieldError[] = Object.values(error).flatMap((field) => {
+      if (Array.isArray(field)) {
+        return field[0].message;
+      }
+      return [field];
+    });
+
+    errors.forEach((err) => {
+      if (err.message) {
+        toast.error(err.message);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!form.formState.isSubmitting) return;
+    if (!form.formState.errors) return;
+
+    handleFormValidation(form.formState.errors);
+  }, [form.formState.errors, form.formState.isSubmitting]);
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+        <InputFormField
           control={form.control}
           name="email"
-          rules={{ required: true }}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="example@example.com"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Email"
+          placeholder="Ingrese su email"
         />
-        <FormField
+        <InputFormField
           control={form.control}
           name="password"
-          rules={{ required: true }}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Contraseña</FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Contraseña"
+          placeholder="Ingrese su contraseña"
+          type="password"
         />
         <Button className="w-full" type="submit">
           Submit
