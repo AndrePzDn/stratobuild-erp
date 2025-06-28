@@ -8,7 +8,6 @@ import { sidebarItems } from "@/constants/sidebarItems";
 import { Link, useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import clsx from "clsx";
-import { Separator } from "./ui/separator";
 import Logo from "@/assets/stratobuild-logo.svg";
 import React from "react";
 import {
@@ -23,6 +22,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { EllipsisVerticalIcon, LogOutIcon, UserIcon } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
+import { Separator } from "./ui/separator";
 
 export default function Sidebar() {
   const location = useLocation();
@@ -30,14 +30,14 @@ export default function Sidebar() {
   const { user, logout } = useAuthStore();
 
   return (
-    <aside className="relative w-64 h-screen border-r bg-white shadow-sm text-sm">
-      <ScrollArea className="h-full p-4">
+    <aside className="relative w-64 h-screen bg-primary text-sm">
+      <ScrollArea className="h-full p-4 pr-0">
         <figure>
           <Link to="/home" className="flex mb-4">
-            <img src={Logo} alt="StratoBuild Logo" className="w-full" />
+            {/* <img src={Logo} alt="StratoBuild Logo" className="w-full" /> */}
           </Link>
         </figure>
-        <Accordion type="multiple" className="space-y-1 mb-16">
+        <Accordion type="multiple" className="space-y-1 mb-16 font-semibold">
           {sidebarItems.map((item, index) => {
             if (!item.children || item.children.length === 0) {
               return (
@@ -45,20 +45,21 @@ export default function Sidebar() {
                   <Link
                     to={item.redirect ?? "#"}
                     className={clsx(
-                      "flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted hover:underline",
-                      pathname === item.redirect && "bg-muted font-semibold",
+                      "flex items-center gap-3 px-3 py-2 rounded-md rounded-r-none hover:bg-secondary hover:text-secondary-foreground text-primary-foreground",
+                      pathname === item.redirect &&
+                        "font-semibold text-secondary-foreground bg-secondary"
                     )}
                   >
                     {item.icon}
                     <span>{item.label}</span>
                   </Link>
-                  <Separator />
+                  <Separator className="my-1" />
                 </React.Fragment>
               );
             }
             return (
               <AccordionItem key={index} value={item.label}>
-                <AccordionTrigger className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted">
+                <AccordionTrigger className="flex items-center gap-3 px-3 py-2 rounded-md rounded-r-none hover:bg-secondary hover:text-secondary-foreground bg-primary text-primary-foreground">
                   <div className="flex items-center gap-3">
                     {item.icon}
                     <span>{item.label}</span>
@@ -71,9 +72,9 @@ export default function Sidebar() {
                         <Link
                           to={child.redirect}
                           className={clsx(
-                            "block px-2 py-1 text-sm rounded hover:bg-muted",
+                            "block px-2 py-1 text-sm rounded-md rounded-r-none hover:bg-secondary hover:text-secondary-foreground bg-primary text-primary-foreground",
                             pathname === child.redirect &&
-                              "bg-muted font-semibold",
+                              "bg-secondary font-semibold text-secondary-foreground"
                           )}
                         >
                           {child.label}
@@ -89,7 +90,7 @@ export default function Sidebar() {
         <footer className="absolute bottom-0 py-4 text-xs w-full pr-8">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="flex items-center gap-2 cursor-pointer hover:bg-muted px-3 py-2 rounded-md bg-white">
+              <div className="flex items-center gap-2 cursor-pointer hover:bg-secondary hover:text-secondary-foreground px-3 py-2 rounded-md bg-secondary">
                 <Avatar className="h-8 w-8 rounded-lg grayscale">
                   <AvatarImage alt={user?.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
