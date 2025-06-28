@@ -24,7 +24,7 @@ export const listAllEntity = (entity: string, token: string) => {
 }
 
 export const listEntity = (entity: string, page: number, items: number, token: string) => {
-  return axios.get(`${BASE_URL}/${entity}/list?page=${page}&items=${items}`, {
+  return axios.get(`${BASE_URL}/${entity}/list?page=${page}&items=${items}&q=enabled`, {
     headers: {
       "Authorization": `Bearer ${token}`,
     },
