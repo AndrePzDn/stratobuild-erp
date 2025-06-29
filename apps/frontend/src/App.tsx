@@ -15,6 +15,7 @@ import BudgetPage from "./pages/Budget/BudgetPage";
 import ProjectPage from "./pages/Project/ProjectPage";
 import PlanningPage from "./pages/Planning/PlanningPage";
 import PaymentsPage from "./pages/Payments/PaymentsPage";
+import TaxesPage from "./pages/TaxesPage/TaxesPage";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
             <Route path="/customer" element={<ClientPage />} />
             <Route path="/quote" element={<QuotePage />} />
             <Route path="/invoice" element={<>Hola</>} />
-            <Route path="/taxes" element={<>Hola</>} />
+            <Route path="/taxes" element={<TaxesPage />} />
             <Route path="/currencies" element={<CurrencyPage />} />
             <Route path="/bank-price" element={<BankPricePage />} />
             <Route path="/resources" element={<ResourcePage />} />
