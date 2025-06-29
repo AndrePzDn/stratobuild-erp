@@ -278,6 +278,14 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                               {value ? "Sí" : "No"}
                             </span>
                           );
+                        case "percentage":
+                          return (
+                            <span className="text-sm">
+                              {typeof value === "number"
+                                ? `${value.toFixed(1)}%`
+                                : ""}
+                            </span>
+                          );
                         case "currency":
                           return (
                             <span className="text-sm">
