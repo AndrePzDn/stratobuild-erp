@@ -216,7 +216,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
         )}
       </nav>
 
-      <div className="border border-black/30 rounded-md bg-white text-black max-h-[85dvh] min-h-[85dvh] overflow-y-auto">
+      <div className="border rounded-md bg-white text-black max-h-[85dvh] min-h-[85dvh] overflow-y-auto">
         <Table>
           <TableHeader>
             <TableRow className="bg-primary text-primary-foreground">

@@ -15,8 +15,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -30,8 +28,8 @@ export default function Sidebar() {
   const { user, logout } = useAuthStore();
 
   return (
-    <aside className="relative w-64 h-screen bg-primary text-sm">
-      <ScrollArea className="h-full p-4 pr-0">
+    <aside className="relative w-64 h-screen text-sm border-r shadow-lg bg-muted">
+      <ScrollArea className="h-full p-4">
         <figure>
           <Link to="/home" className="flex mb-4">
             {/* <img src={Logo} alt="StratoBuild Logo" className="w-full" /> */}
@@ -45,9 +43,9 @@ export default function Sidebar() {
                   <Link
                     to={item.redirect ?? "#"}
                     className={clsx(
-                      "flex items-center gap-3 px-3 py-2 rounded-md rounded-r-none hover:bg-secondary hover:text-secondary-foreground text-primary-foreground",
+                      "flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-primary hover:text-primary-foreground",
                       pathname === item.redirect &&
-                        "font-semibold text-secondary-foreground bg-secondary"
+                        "font-semibold bg-primary text-white"
                     )}
                   >
                     {item.icon}
@@ -59,7 +57,7 @@ export default function Sidebar() {
             }
             return (
               <AccordionItem key={index} value={item.label}>
-                <AccordionTrigger className="flex items-center gap-3 px-3 py-2 rounded-md rounded-r-none hover:bg-secondary hover:text-secondary-foreground bg-primary text-primary-foreground">
+                <AccordionTrigger className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-primary hover:text-primary-foreground">
                   <div className="flex items-center gap-3">
                     {item.icon}
                     <span>{item.label}</span>
@@ -72,9 +70,9 @@ export default function Sidebar() {
                         <Link
                           to={child.redirect}
                           className={clsx(
-                            "block px-2 py-1 text-sm rounded-md rounded-r-none hover:bg-secondary hover:text-secondary-foreground bg-primary text-primary-foreground",
+                            "block px-2 py-2 text-sm rounded-md hover:bg-primary hover:text-primary-foreground ",
                             pathname === child.redirect &&
-                              "bg-secondary font-semibold text-secondary-foreground"
+                              "bg-primary font-semibold text-white"
                           )}
                         >
                           {child.label}
@@ -93,7 +91,9 @@ export default function Sidebar() {
               <div className="flex items-center gap-2 cursor-pointer hover:bg-secondary hover:text-secondary-foreground px-3 py-2 rounded-md bg-secondary">
                 <Avatar className="h-8 w-8 rounded-lg grayscale">
                   <AvatarImage alt={user?.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {user?.name.charAt(0)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user?.name}</span>
@@ -109,28 +109,12 @@ export default function Sidebar() {
               align="end"
               sideOffset={4}
             >
-              <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage alt={user?.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user?.name}</span>
-                    <span className="text-muted-foreground truncate text-xs">
-                      {user?.email}
-                    </span>
-                  </div>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <UserIcon />
                   Cuenta
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={logout}>
                 <LogOutIcon />
                 Cerrar sesión
