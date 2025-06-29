@@ -16,6 +16,8 @@ import ProjectPage from "./pages/Project/ProjectPage";
 import PlanningPage from "./pages/Planning/PlanningPage";
 import PaymentsPage from "./pages/Payments/PaymentsPage";
 import TaxesPage from "./pages/TaxesPage/TaxesPage";
+import ProjectServicePage from "./pages/ProjectService/ProjectServicePage";
+import ProjectCategoryPage from "./pages/ProjectCategory/ProjectCategoryPage";
 
 function App() {
   return (
@@ -28,8 +30,8 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/budget" element={<BudgetPage />} />
             <Route path="/certification" element={<>Hola</>} />
-            <Route path="/service/project" element={<>Hola</>} />
-            <Route path="/category/project" element={<>Hola</>} />
+            <Route path="/service/project" element={<ProjectServicePage />} />
+            <Route path="/category/project" element={<ProjectCategoryPage />} />
             <Route path="/project/list/:page" element={<ProjectPage />} />
             <Route path="/project/planning/:id" element={<PlanningPage />} />
             <Route path="/project/payments/:id" element={<PaymentsPage />} />

@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
 
   name: { type: String, required: true },
   description: { type: String, required: true },
-  color: { type: String, required: true, trim: true, lowercase: true },
+  color: { type: String, required: false, trim: true, lowercase: true },
 });
 
 module.exports = mongoose.model('ProjectType', schema);
