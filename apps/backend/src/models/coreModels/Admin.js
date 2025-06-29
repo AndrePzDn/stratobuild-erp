@@ -1,6 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const RolesEnum = [
+  'Admin',
+  'ProjectManager',
+  'SiteSupervisor',
+  'Accountant',
+  'InventoryManager',
+  'GeneralDirector',
+];
+
 const adminSchema = new Schema({
   removed: {
     type: Boolean,
@@ -29,8 +38,8 @@ const adminSchema = new Schema({
   },
   role: {
     type: String,
-    default: 'owner',
-    enum: ['owner'],
+    default: 'Admin',
+    enum: RolesEnum,
   },
 });
 
