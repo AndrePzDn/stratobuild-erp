@@ -18,6 +18,7 @@ import PaymentsPage from "./pages/Payments/PaymentsPage";
 import TaxesPage from "./pages/TaxesPage/TaxesPage";
 import ProjectServicePage from "./pages/ProjectService/ProjectServicePage";
 import ProjectCategoryPage from "./pages/ProjectCategory/ProjectCategoryPage";
+import UsersPage from "./pages/Users/UsersPage";
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function App() {
             <Route path="/resources" element={<ResourcePage />} />
             <Route path="/UOM" element={<UnitOfMeasurementPage />} />
             <Route path="/providers" element={<ProviderPage />} />
-            <Route path="/admin-users" element={<>Hola</>} />
+            <Route path="/admin-users" element={<UsersPage />} />
             <Route path="/settings" element={<>Hola</>} />
             <Route path="/about" element={<>Hola</>} />
           </Route>
