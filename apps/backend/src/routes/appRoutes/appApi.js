@@ -3,25 +3,30 @@ const { catchErrors } = require('@/handlers/errorHandlers');
 const router = express.Router();
 
 const appControllers = require('@/controllers/appControllers');
+const permissionChecker = require('@/controllers/middlewaresControllers/createUserMiddleware');
 const { routesList } = require('@/models/utils');
 
 const routerApp = (entity, controller) => {
-  router.route(`/${entity}/create`).post(catchErrors(controller['create']));
-  router.route(`/${entity}/read/:id`).get(catchErrors(controller['read']));
-  router.route(`/${entity}/update/:id`).patch(catchErrors(controller['update']));
-  router.route(`/${entity}/delete/:id`).delete(catchErrors(controller['delete']));
-  router.route(`/${entity}/search`).get(catchErrors(controller['search']));
-  router.route(`/${entity}/list`).get(catchErrors(controller['list']));
-  router.route(`/${entity}/listAll`).get(catchErrors(controller['listAll']));
-  router.route(`/${entity}/filter`).get(catchErrors(controller['filter']));
-  router.route(`/${entity}/summary`).get(catchErrors(controller['summary']));
+  const mapRoute = (path, method, action) => {
+    const checker = permissionChecker(entity, action);
+    router[method](`/${entity}${path}`, checker.hasPermission, catchErrors(controller[action]));
+  };
+  mapRoute('/create', 'post', 'create');
+  mapRoute('/read/:id', 'get', 'read');
+  mapRoute('/update/:id', 'patch', 'update');
+  mapRoute('/delete/:id', 'delete', 'delete');
+  mapRoute('/search', 'get', 'search');
+  mapRoute('/list', 'get', 'list');
+  mapRoute('/listAll', 'get', 'listAll');
+  mapRoute('/filter', 'get', 'filter');
+  mapRoute('/summary', 'get', 'summary');
 
   if (entity === 'invoice' || entity === 'quote' || entity === 'payment') {
-    router.route(`/${entity}/mail`).post(catchErrors(controller['mail']));
+    mapRoute('mail', 'post', 'mail');
   }
 
   if (entity === 'quote' || entity === 'budget') {
-    router.route(`/${entity}/convert/:id`).post(catchErrors(controller['convert']));
+    mapRoute('/convert/:id', 'post', 'convert');
   }
 };
 

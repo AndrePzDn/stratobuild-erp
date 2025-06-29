@@ -35,14 +35,11 @@ export const listEntity = (
   items: number,
   token: string
 ) => {
-  return axios.get(
-    `${BASE_URL}/${entity}/list?page=${page}&items=${items}&q=enabled`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  return axios.get(`${BASE_URL}/${entity}/list?page=${page}&items=${items}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const deleteEntity = async (
