@@ -22,8 +22,8 @@ export const sidebarItems = [
       { label: "Proyectos", redirect: "/project/list/1" },
       { label: "Presupuesto", redirect: "/budget" },
       // { label: "Certificaciones", redirect: "/certification" },
-      // { label: "Servicios", redirect: "/service/project" },
-      // { label: "Categorías", redirect: "/category/project" },
+      { label: "Servicios", redirect: "/service/project" },
+      { label: "Categorías", redirect: "/category/project" },
     ],
   },
   {
