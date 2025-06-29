@@ -8,7 +8,7 @@ import { sidebarItems } from "@/constants/sidebarItems";
 import { Link, useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import clsx from "clsx";
-import Logo from "@/assets/stratobuild-logo.svg";
+// import Logo from "@/assets/stratobuild-logo.svg";
 import React from "react";
 import {
   DropdownMenu,
@@ -57,7 +57,16 @@ export default function Sidebar() {
             }
             return (
               <AccordionItem key={index} value={item.label}>
-                <AccordionTrigger className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-primary hover:text-primary-foreground">
+                <AccordionTrigger
+                  className={clsx(
+                    "flex items-center gap-3 px-3 py-2 rounded-md hover:bg-primary hover:text-primary-foreground",
+                    item.children &&
+                      item.children.some(
+                        (child) => child.redirect === pathname
+                      ) &&
+                      "bg-secondary font-semibold text-secondary-foreground"
+                  )}
+                >
                   <div className="flex items-center gap-3">
                     {item.icon}
                     <span>{item.label}</span>
