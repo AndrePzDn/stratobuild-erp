@@ -19,7 +19,6 @@ export default function UsersPage() {
       form={<UserFormFields />}
       schema={UserSchema}
       canBeCreated
-      editable
       deletable
     />
   );

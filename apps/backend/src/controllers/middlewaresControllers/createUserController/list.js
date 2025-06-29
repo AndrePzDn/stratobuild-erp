@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
-const AdminModel = mongoose.model('Admin');
-
-const paginatedList = async (req, res) => {
+const paginatedList = async (userModel, req, res) => {
+  const AdminModel = mongoose.model(userModel);
   const page = req.query.page || 1;
   const limit = parseInt(req.query.items) || 1000;
   const skip = page * limit - limit;

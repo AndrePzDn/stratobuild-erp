@@ -1,3 +1,4 @@
+const { role } = require('@/locale/translation/en_us');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -15,6 +16,7 @@ const authUser = async (req, res, { user, databasePassword, password, UserPasswo
     const token = jwt.sign(
       {
         id: user._id,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: req.body.remember ? 365 * 24 + 'h' : '24h' }
@@ -28,15 +30,6 @@ const authUser = async (req, res, { user, databasePassword, password, UserPasswo
       }
     ).exec();
 
-    // .cookie(`token_${user.cloud}`, token, {
-    //     maxAge: req.body.remember ? 365 * 24 * 60 * 60 * 1000 : null,
-    //     sameSite: 'None',
-    //     httpOnly: true,
-    //     secure: true,
-    //     domain: req.hostname,
-    //     path: '/',
-    //     Partitioned: true,
-    //   })
     res.status(200).json({
       success: true,
       result: {

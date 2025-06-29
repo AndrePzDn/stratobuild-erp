@@ -25,12 +25,17 @@ const adminSchema = new Schema({
     lowercase: true,
     trim: true,
     required: true,
+    unique: true,
   },
   name: { type: String, required: true },
   surname: { type: String },
   photo: {
     type: String,
     trim: true,
+  },
+  haveToUpdatePassword: {
+    type: Boolean,
+    default: true,
   },
   created: {
     type: Date,
