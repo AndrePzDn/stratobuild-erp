@@ -16,7 +16,13 @@ import {
 import { Button } from "../ui/button";
 import FormDialog from "@/pages/Client/components/FormDialog";
 
-import { EllipsisVertical, Plus } from "lucide-react";
+import {
+  ArrowUpRight,
+  Edit,
+  EllipsisVertical,
+  Plus,
+  Trash,
+} from "lucide-react";
 
 import {
   convertEntity,
@@ -30,6 +36,8 @@ import { normalizeItemToEdit } from "@/utils/normalizeFields";
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useAuthStore } from "@/stores/authStore";
+import type { Entity } from "@/types";
+import ConfirmationDialog from "../ui/confirmation-dialog";
 
 interface TableHeadProps {
   label: string;
@@ -56,10 +64,10 @@ interface Props<T extends z.ZodTypeAny> {
 }
 
 interface TableRowActionsProps {
-  item: any;
-  onDelete?: (item: any) => void;
-  onEdit?: (item: any) => void;
-  onConvert?: (item: any) => void;
+  item: Entity;
+  onDelete?: (item: Entity) => void;
+  onEdit?: (item: Entity) => void;
+  onConvert?: (item: Entity) => void;
   deletable?: boolean;
   editable?: boolean;
   convertible?: boolean;
@@ -74,6 +82,8 @@ function TableRowActions({
   editable = true,
   convertible = false,
 }: TableRowActionsProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -83,31 +93,50 @@ function TableRowActions({
           size="icon"
         >
           <EllipsisVertical />
-          <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-32">
         {editable && (
-          <DropdownMenuItem onClick={() => onEdit?.(item)}>
+          <DropdownMenuItem
+            onClick={() => onEdit?.(item)}
+            className="flex items-center justify-between gap-2"
+          >
             Editar
+            <Edit />
           </DropdownMenuItem>
         )}
         {convertible && (
-          <DropdownMenuItem onClick={() => onConvert?.(item)}>
+          <DropdownMenuItem
+            onClick={() => onConvert?.(item)}
+            className="flex items-center justify-between gap-2"
+          >
             Convertir
+            <ArrowUpRight />
           </DropdownMenuItem>
         )}
         {deletable && (
           <>
             <DropdownMenuItem
               variant="destructive"
-              onClick={() => onDelete?.(item)}
+              onClick={() => setIsDeleting(!isDeleting)}
+              className="flex items-center justify-between gap-2"
             >
               Eliminar
+              <Trash />
             </DropdownMenuItem>
           </>
         )}
       </DropdownMenuContent>
+      <ConfirmationDialog
+        title={`Estas seguro de eliminar ${item.name || item._id}?`}
+        isOpen={isDeleting}
+        handleOpen={() => setIsDeleting(!isDeleting)}
+        handleOnConfirm={() => {
+          onDelete?.(item);
+          setIsDeleting(false);
+        }}
+        handleOnCancel={() => setIsDeleting(false)}
+      />
     </DropdownMenu>
   );
 }
@@ -129,7 +158,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   const [items, setItems] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [itemToEdit, setItemToEdit] = useState<any | null>(null);
+  const [itemToEdit, setItemToEdit] = useState<Entity | null>(null);
 
   const fetchData = useCallback(async () => {
     if (!user) return;
@@ -156,7 +185,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     fetchData();
   };
 
-  const handleDelete = async (item: any) => {
+  const handleDelete = async (item: Entity) => {
     if (!user) return;
 
     const { token } = user;
@@ -166,7 +195,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     fetchData();
   };
 
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: Entity) => {
     setItemToEdit(item);
     setOpenEditDialog(true);
   };
@@ -184,7 +213,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     fetchData();
   };
 
-  const handleConvert = async (item: any) => {
+  const handleConvert = async (item: Entity) => {
     if (!user) return;
     const res = await convertEntity(entity, item._id, user._id, user.token);
     console.log(await res.data);

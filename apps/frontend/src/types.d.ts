@@ -1,35 +1,34 @@
-export interface UnitOfMeasurement {
+export interface Entity {
   _id: string;
+}
+
+export interface UnitOfMeasurement extends Entity {
   name: string;
   description: string;
   symbol: string;
 }
 
-export interface Resource {
-  _id: string;
+export interface Resource extends Entity {
   name: string;
   description: string;
   resourceType: string;
   unitOfMeasurement: UnitOfMeasurement;
 }
 
-export interface Currency {
-  _id: string;
+export interface Currency extends Entity {
   name: string;
   symbol: string;
   dollarValue: number;
   quoteDate: Date;
 }
 
-export interface Provider {
-  _id: string;
+export interface Provider extends Entity {
   name: string;
   phone: string;
   email: string;
 }
 
-export interface Client {
-  _id: string;
+export interface Client extends Entity {
   name: string;
   phone: string;
   country: string;
@@ -38,14 +37,12 @@ export interface Client {
   createdBy?: string;
 }
 
-export interface Taxes {
-  _id: string;
+export interface Taxes extends Entity {
   taxName: string;
   taxValue: number;
 }
 
-export interface PriceBank {
-  _id: string;
+export interface PriceBank extends Entity {
   unitPrice: number;
   quoteDate: Date;
   resource: Resource;
@@ -54,22 +51,19 @@ export interface PriceBank {
   unitOfMeasurement: UnitOfMeasurement;
 }
 
-export interface ProjectType {
-  _id: string;
+export interface ProjectType extends Entity {
   name: string;
   description: string;
   color: string;
 }
 
-export interface ServiceType {
-  _id: string;
+export interface ServiceType extends Entity {
   name: string;
   description: string;
   color: string;
 }
 
-export interface Budget {
-  _id: string;
+export interface Budget extends Entity {
   name: string;
   note: string;
   createdBy: Client;
@@ -77,8 +71,7 @@ export interface Budget {
 
 const ProjectEnum = 'active' | 'inactive' | 'completed' | 'in_progress' | 'on_hold'
 
-export interface Project {
-  _id: string;
+export interface Project extends Entity {
   name: string;
   location?: string;
   status: ProjectEnum;
@@ -90,8 +83,7 @@ export interface Project {
   budget: Budget;
 }
 
-export interface Task {
-  _id: string;
+export interface Task extends Entity {
   name: string;
   description?: string;
   category: string;
@@ -102,8 +94,7 @@ export interface Task {
   project: Project;
 }
 
-export interface Payment {
-  _id: string;
+export interface Payment extends Entity {
   description: string;
   amount: number;
   paymentType: string;
@@ -112,8 +103,7 @@ export interface Payment {
   cashFlow: CashFlow;
 }
 
-export interface CashFlow {
-  _id: string;
+export interface CashFlow extends Entity {
   estimatedTotal: number;
   availableBudget: number;
   total: number;
