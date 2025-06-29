@@ -1,6 +1,7 @@
 const read = require('./read');
 const paginatedList = require('./list');
 const updateProfile = require('./updateProfile');
+const create = require('./create');
 
 const updatePassword = require('./updatePassword');
 const updateProfilePassword = require('./updateProfilePassword');
@@ -13,7 +14,8 @@ const createUserController = (userModel) => {
   userController.updateProfilePassword = (req, res) => updateProfilePassword(userModel, req, res);
 
   userController.read = (req, res) => read(userModel, req, res);
-  userController.list = (req, res) => paginatedList(req, res);
+  userController.list = (req, res) => paginatedList(userModel, req, res);
+  userController.create = (req, res) => create(userModel, req, res);
 
   return userController;
 };
