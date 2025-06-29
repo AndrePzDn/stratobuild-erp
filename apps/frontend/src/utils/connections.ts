@@ -13,6 +13,18 @@ export const loginUser = (values: LoginFormValues) => {
   );
 };
 
+export const logoutUser = (token: string) => {
+  return axios.post(
+    `${BASE_URL}/logout?timestamp=${new Date().getTime()}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
 export const readEntity = (entity: string, id: string, token: string) => {
   return axios.get(`${BASE_URL}/${entity}/read/${id}`, {
     headers: {
