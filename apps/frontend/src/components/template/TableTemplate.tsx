@@ -177,9 +177,8 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
 
     const { token } = user;
     const res = await postEntity(entity, data, token);
-    console.log(await res.data);
 
-    if (!res.data.success) return;
+    if (!res || !res.data.success) return;
 
     setOpenCreateDialog(false);
     fetchData();
@@ -189,8 +188,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     if (!user) return;
 
     const { token } = user;
-    const res = await deleteEntity(entity, item._id, token);
-    console.log(await res.data);
+    await deleteEntity(entity, item._id, token);
 
     fetchData();
   };
@@ -206,7 +204,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     const { token } = user;
     const res = await patchEntity(entity, itemToEdit._id, data, token);
 
-    if (!res.data.success) return;
+    if (!res || !res.data.success) return;
 
     setOpenEditDialog(false);
     setItemToEdit(null);
@@ -215,8 +213,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
 
   const handleConvert = async (item: Entity) => {
     if (!user) return;
-    const res = await convertEntity(entity, item._id, user._id, user.token);
-    console.log(await res.data);
+    await convertEntity(entity, item._id, user._id, user.token);
 
     fetchData();
   };

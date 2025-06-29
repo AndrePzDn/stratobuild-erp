@@ -17,9 +17,10 @@ export default function TaxesPage() {
       config={config}
       entity="taxes"
       canBeCreated={true}
-      deletable={true}
+      deletable={false}
       schema={TaxSchema}
       form={<TaxFormFields />}
+      editable
     />
   );
 }
