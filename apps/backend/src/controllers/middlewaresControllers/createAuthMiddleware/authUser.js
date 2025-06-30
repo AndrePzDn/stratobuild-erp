@@ -1,4 +1,3 @@
-const { role } = require('@/locale/translation/en_us');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -41,6 +40,7 @@ const authUser = async (req, res, { user, databasePassword, password, UserPasswo
         photo: user.photo,
         token: token,
         maxAge: req.body.remember ? 365 : null,
+        haveToUpdatePassword: user.haveToUpdatePassword,
       },
       message: 'Successfully login user',
     });

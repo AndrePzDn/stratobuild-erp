@@ -22,13 +22,12 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       const res = await loginUser(data);
-      console.log(res.data);
       login(res.data.result);
       navigate("/home");
-      toast.success("Se inició sesión correctamente", { draggable: true });
+      toast.success("Se inició sesión correctamente");
     } catch (error) {
       console.error("Login failed:", error);
-      toast.error("Error al iniciar sesión. Por favor, intente nuevamente.", { draggable: true });
+      toast.error("Error al iniciar sesión. Por favor, intente nuevamente.");
     }
   };
 

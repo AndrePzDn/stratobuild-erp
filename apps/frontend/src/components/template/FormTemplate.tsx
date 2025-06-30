@@ -37,6 +37,7 @@ export default function FormTemplate<T extends z.ZodTypeAny>({
       <form
         id={`${schema.toString()}-form`}
         onSubmit={methods.handleSubmit(onSubmit)}
+        className="w-full"
       >
         {children}
       </form>

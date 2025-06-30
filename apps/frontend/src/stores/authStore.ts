@@ -8,6 +8,7 @@ interface User {
   surname: string;
   role: string;
   token: string;
+  haveToUpdatePassword: boolean;
 }
 
 interface AuthState {

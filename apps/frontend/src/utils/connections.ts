@@ -3,6 +3,7 @@ import type { Entity } from "@/types";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { ErrorResponse, handleConnectionPetition } from "./errorHandler";
+import type { UpdatePasswordSchemaType } from "@/pages/UpdatePassword/schemas/updatePassword.schema";
 
 const BASE_URL = "/api";
 
@@ -17,6 +18,23 @@ export const logoutUser = (token: string) => {
   return axios.post(
     `${BASE_URL}/logout?timestamp=${new Date().getTime()}`,
     {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const updatePassword = (
+  token: string,
+  data: UpdatePasswordSchemaType
+) => {
+  return axios.patch(
+    `${BASE_URL}/admin/profile/password`,
+    {
+      ...data,
+    },
     {
       headers: {
         Authorization: `Bearer ${token}`,
