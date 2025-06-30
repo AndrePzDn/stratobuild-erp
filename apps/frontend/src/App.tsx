@@ -19,6 +19,7 @@ import TaxesPage from "./pages/TaxesPage/TaxesPage";
 import ProjectServicePage from "./pages/ProjectService/ProjectServicePage";
 import ProjectCategoryPage from "./pages/ProjectCategory/ProjectCategoryPage";
 import UsersPage from "./pages/Users/UsersPage";
+import UpdatePasswordPage from "./pages/UpdatePassword/UpdatePasswordPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/update-password" element={<UpdatePasswordPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/budget" element={<BudgetPage />} />

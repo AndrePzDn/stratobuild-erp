@@ -5,6 +5,7 @@ const { generate: uniqueId } = require('shortid');
 
 const updateProfilePassword = async (userModel, req, res) => {
   const UserPassword = mongoose.model(userModel + 'Password');
+  const User = mongoose.model(userModel);
 
   const reqUserName = userModel.toLowerCase();
   const userProfile = req[reqUserName];
@@ -46,6 +47,18 @@ const updateProfilePassword = async (userModel, req, res) => {
       new: true, // return the new result instead of the old one
     }
   ).exec();
+
+  await User.findOneAndUpdate(
+    {
+      _id: userProfile._id,
+    },
+    {
+      haveToUpdatePassword: false,
+    },
+    {
+      new: true,
+    }
+  );
 
   if (!resultPassword) {
     return res.status(403).json({
