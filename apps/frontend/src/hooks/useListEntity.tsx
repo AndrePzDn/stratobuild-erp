@@ -7,6 +7,9 @@ export default function useListEntity<T>(entity: string, page: number) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [listData, setListData] = useState<T[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const refreshData = () => {
+    fetchData();
+  };
 
   const { user } = useAuthStore();
 
@@ -42,5 +45,5 @@ export default function useListEntity<T>(entity: string, page: number) {
     fetchData();
   }, [fetchData]);
 
-  return [listData, isLoading, isSuccess] as const;
+  return [listData, isLoading, isSuccess, refreshData] as const;
 }

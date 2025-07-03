@@ -20,6 +20,7 @@ import ProjectServicePage from "./pages/ProjectService/ProjectServicePage";
 import ProjectCategoryPage from "./pages/ProjectCategory/ProjectCategoryPage";
 import UsersPage from "./pages/Users/UsersPage";
 import UpdatePasswordPage from "./pages/UpdatePassword/UpdatePasswordPage";
+import CertificationPage from "./pages/Certification/CertificationPage";
 
 function App() {
   return (
@@ -32,12 +33,12 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/budget" element={<BudgetPage />} />
-            <Route path="/certification" element={<>Hola</>} />
             <Route path="/service/project" element={<ProjectServicePage />} />
             <Route path="/category/project" element={<ProjectCategoryPage />} />
             <Route path="/project/list/:page" element={<ProjectPage />} />
             <Route path="/project/planning/:id" element={<PlanningPage />} />
             <Route path="/project/payments/:id" element={<PaymentsPage />} />
+            <Route path="/project/certifications/:id" element={<CertificationPage />} />
             <Route path="/customer" element={<ClientPage />} />
             <Route path="/quote" element={<QuotePage />} />
             <Route path="/invoice" element={<>Hola</>} />

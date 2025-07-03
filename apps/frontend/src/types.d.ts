@@ -69,7 +69,8 @@ export interface Budget extends Entity {
   createdBy: Client;
 }
 
-const ProjectEnum = 'active' | 'inactive' | 'completed' | 'in_progress' | 'on_hold'
+const ProjectEnum =
+  "active" | "inactive" | "completed" | "in_progress" | "on_hold";
 
 export interface Project extends Entity {
   name: string;
@@ -88,7 +89,7 @@ export interface Task extends Entity {
   description?: string;
   category: string;
   progress: number;
-  status: 'not_started' | 'in_progress' | 'completed' | 'on_hold' | 'delayed';
+  status: "not_started" | "in_progress" | "completed" | "on_hold" | "delayed";
   startDate: Date;
   endDate: Date;
   project: Project;
@@ -107,5 +108,13 @@ export interface CashFlow extends Entity {
   estimatedTotal: number;
   availableBudget: number;
   total: number;
-  project: Project
+  project: Project;
+}
+
+export interface Certification extends Entity {
+  name: string;
+  description: string;
+  certificationType: string;
+  certificationUrl: string;
+  project: Project;
 }

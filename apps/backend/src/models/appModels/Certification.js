@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   certificationType: { type: String, required: true },
+  certificationUrl: { type: String, required: true },
 
   project: { type: mongoose.Schema.ObjectId, ref: 'Project', autopopulate: true, required: true },
 });

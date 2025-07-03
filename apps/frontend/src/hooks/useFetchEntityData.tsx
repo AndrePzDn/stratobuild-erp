@@ -2,7 +2,13 @@ import { useAuthStore } from "@/stores/authStore";
 import { listAllEntity, readEntity } from "@/utils/connections";
 import { useCallback, useEffect, useState } from "react";
 
-export default function useFetchData<T>(entity: string, id?: string) {
+export default function useFetchData<T>(
+  entity: string,
+  id?: string
+): {
+  data: T[];
+  refetch: () => Promise<void>;
+} {
   const [data, setData] = useState<T[]>([]);
   const { user } = useAuthStore();
 

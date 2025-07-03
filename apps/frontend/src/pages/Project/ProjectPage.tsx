@@ -27,21 +27,18 @@ export default function ProjectPage() {
 
   const [listData, isLoading, isSuccess] = useListEntity<Project>(
     "project",
-    pageNumber,
+    pageNumber
   );
 
   const projectServiceGrouped = () => {
-    return listData.reduce(
-      (acc, project) => {
-        const service = project.serviceType.name;
-        if (!acc[service]) {
-          acc[service] = [];
-        }
-        acc[service].push(project);
-        return acc;
-      },
-      {} as Record<string, Project[]>,
-    );
+    return listData.reduce((acc, project) => {
+      const service = project.serviceType.name;
+      if (!acc[service]) {
+        acc[service] = [];
+      }
+      acc[service].push(project);
+      return acc;
+    }, {} as Record<string, Project[]>);
   };
 
   const statusTranslate = (status: string) => {
@@ -142,7 +139,12 @@ export default function ProjectPage() {
                   >
                     Planeación
                   </TooltipButton>
-                  <TooltipButton icon={<Files />}>
+                  <TooltipButton
+                    icon={<Files />}
+                    onClick={() =>
+                      navigate(`/project/certifications/${project._id}`)
+                    }
+                  >
                     Certificaciones
                   </TooltipButton>
                   <TooltipButton
