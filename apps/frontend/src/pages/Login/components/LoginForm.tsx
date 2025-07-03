@@ -9,6 +9,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { InputFormField } from "@/components/ui/input-form-field";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { CheckboxFormField } from "@/components/ui/checkbox-form-field";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -70,6 +71,12 @@ export default function LoginForm() {
           label="Contraseña"
           placeholder="Ingrese su contraseña"
           type="password"
+        />
+        <CheckboxFormField
+          control={form.control}
+          label="Recordar sesión"
+          name="remember"
+          placeholder="Seleccione para recordar sesión"
         />
         <Button className="w-full" type="submit">
           Submit
