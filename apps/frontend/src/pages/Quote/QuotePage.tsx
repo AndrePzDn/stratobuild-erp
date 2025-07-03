@@ -7,11 +7,11 @@ export default function QuotePage() {
     tableHead: [
       { label: "Nombre", name: "name" },
       { label: "Cliente", name: "client.name" },
-      { label: "Fecha", name: "date" },
-      { label: "Fecha de Expiracion", name: "expiredDate" },
+      { label: "Fecha", name: "date", type: "date" },
+      { label: "Fecha de Expiracion", name: "expiredDate", type: "date" },
       { label: "Creado Por", name: "created_by.name" },
       { label: "Total", name: "total" },
-      { label: "Estado", name: "status" },
+      { label: "Estado", name: "status", type: "status" },
     ],
     labelName: "Cotizaciones",
   };
