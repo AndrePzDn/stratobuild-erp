@@ -23,17 +23,17 @@ type Props = {
 
 export function DateRangePicker({ date, setDate }: Props) {
   const [calendarRange, setCalendarRange] = useState<DateRange | undefined>(
-    date,
+    date
   );
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant="secondary"
+          variant="outline"
           className={cn(
             "w-[300px] justify-start text-left font-normal",
-            !date && "text-muted-foreground",
+            !date && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -51,7 +51,7 @@ export function DateRangePicker({ date, setDate }: Props) {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="w-auto p-2" align="start">
         <Calendar
           initialFocus
           mode="range"
