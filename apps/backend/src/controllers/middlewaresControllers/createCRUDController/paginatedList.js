@@ -3,7 +3,7 @@ const paginatedList = async (Model, req, res) => {
   const limit = parseInt(req.query.items) || 1000;
   const skip = page * limit - limit;
 
-  const { sortBy = 'enabled', sortValue = -1, filter, equal } = req.query;
+  const { sortBy = 'created', sortValue = -1, filter, equal } = req.query;
 
   const fieldsArray = req.query.fields ? req.query.fields.split(',') : [];
 

@@ -4,6 +4,7 @@ const moment = require('moment');
 const ProjectModel = mongoose.model('Project');
 const TaskModel = mongoose.model('Task');
 const CashFlowModel = mongoose.model('CashFlow');
+const ProjectInventoryModel = mongoose.model('ProjectInventory');
 
 const convertBudgetToProject = async (Model, req, res) => {
   const { createdBy } = req.body;
@@ -18,6 +19,14 @@ const convertBudgetToProject = async (Model, req, res) => {
       success: false,
       result: null,
       message: 'Budget not found',
+    });
+  }
+
+  if (budget.status !== 'approved') {
+    return res.status(400).json({
+      success: false,
+      result: null,
+      message: 'Budget must be approved before conversion',
     });
   }
 
@@ -67,6 +76,8 @@ const convertBudgetToProject = async (Model, req, res) => {
   };
 
   await new CashFlowModel(cashFlowData).save();
+
+  await new ProjectInventoryModel({ project: project._id, items: [], removed: false }).save();
 
   return res.status(200).json({
     success: true,

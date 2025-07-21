@@ -18,6 +18,14 @@ const convertQuoteToBudget = async (Model, req, res) => {
     });
   }
 
+  if (quote.status !== 'approved') {
+    return res.status(400).json({
+      success: false,
+      result: null,
+      message: 'Quote must be approved before conversion',
+    });
+  }
+
   if (quote.converted) {
     return res.status(409).json({
       success: false,
@@ -47,6 +55,7 @@ const convertQuoteToBudget = async (Model, req, res) => {
   };
 
   const budget = await new BudgetModel(budgetData).save();
+  console.log('Budget created:', budget);
 
   quote.converted = true;
   quote.status = 'converted';
