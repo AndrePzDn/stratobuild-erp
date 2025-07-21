@@ -21,6 +21,7 @@ import ProjectCategoryPage from "./pages/ProjectCategory/ProjectCategoryPage";
 import UsersPage from "./pages/Users/UsersPage";
 import UpdatePasswordPage from "./pages/UpdatePassword/UpdatePasswordPage";
 import CertificationPage from "./pages/Certification/CertificationPage";
+import ProjectInventoryPage from "./pages/ProjectInventory/ProjectInventoryPage";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/project/planning/:id" element={<PlanningPage />} />
             <Route path="/project/payments/:id" element={<PaymentsPage />} />
             <Route path="/project/certifications/:id" element={<CertificationPage />} />
+            <Route path="/project/inventory/:id" element={<ProjectInventoryPage />} />
             <Route path="/customer" element={<ClientPage />} />
             <Route path="/quote" element={<QuotePage />} />
             <Route path="/invoice" element={<>Hola</>} />

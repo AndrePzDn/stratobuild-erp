@@ -118,3 +118,10 @@ export interface Certification extends Entity {
   certificationUrl: string;
   project: Project;
 }
+
+export interface InventoryItem extends Entity {
+  quantityUsed: number;
+  quantityAvailable: number;
+  quantity: number;
+  resource: Resource;
+}

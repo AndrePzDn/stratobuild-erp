@@ -130,7 +130,12 @@ export default function ProjectPage() {
                 </CardContent>
 
                 <CardFooter className="flex justify-end flex-wrap gap-4 mt-auto">
-                  <TooltipButton icon={<PackageOpen />}>
+                  <TooltipButton
+                    icon={<PackageOpen />}
+                    onClick={() =>
+                      navigate(`/project/inventory/${project._id}`)
+                    }
+                  >
                     Inventario
                   </TooltipButton>
                   <TooltipButton

@@ -42,7 +42,9 @@ export default function DialogTemplate({
         </DialogTrigger>
       )}
       <DialogContent
-        className={`${size === "sm" ? sm : size === "lg" ? lg : size === "xl" ? xl : ""}`}
+        className={`${
+          size === "sm" ? sm : size === "lg" ? lg : size === "xl" ? xl : ""
+        }`}
       >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

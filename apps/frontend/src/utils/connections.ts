@@ -63,12 +63,14 @@ export const listEntity = (
   entity: string,
   page: number,
   items: number,
-  token: string
+  token: string,
+  params?: Record<string, string | number>
 ) => {
   return axios.get(`${BASE_URL}/${entity}/list?page=${page}&items=${items}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    params,
   });
 };
 
@@ -140,6 +142,9 @@ export const patchEntity = async (
     }
   });
 
+  if (!res) {
+    return;
+  }
   toast.success("Actualización exitosa");
   return res;
 };
@@ -151,15 +156,23 @@ export const convertEntity = async (
   token: string
 ) => {
   const res = await handleConnectionPetition(() =>
-    axios.post(
-      `${BASE_URL}/${entity}/convert/${id}`,
-      { createdBy: createdBy },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    axios
+      .post(
+        `${BASE_URL}/${entity}/convert/${id}`,
+        { createdBy: createdBy },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .catch((error) => {
+        if (error instanceof ErrorResponse) {
+          toast.error(error.apiMessage);
+        } else {
+          console.error("Unexpected error:", error);
+        }
+      })
   );
 
   if (!res) {

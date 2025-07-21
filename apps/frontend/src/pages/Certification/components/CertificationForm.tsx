@@ -24,7 +24,6 @@ export default function CertificationForm({ refreshData }: Props) {
   const handleOnSubmit = async (values: CertificationSchemaValues) => {
     if (!user) return;
 
-    console.log("Submitting certification:", values);
     toast.promise(
       async () => {
         const url = await uploadFile(values.certificationUrl, id);

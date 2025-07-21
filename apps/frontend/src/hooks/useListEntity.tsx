@@ -3,7 +3,11 @@ import { listEntity } from "@/utils/connections";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function useListEntity<T>(entity: string, page: number) {
+export default function useListEntity<T>(
+  entity: string,
+  page: number,
+  params?: Record<string, string | number>
+) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [listData, setListData] = useState<T[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -24,7 +28,7 @@ export default function useListEntity<T>(entity: string, page: number) {
       return;
     }
 
-    const res = await listEntity(entity, page, 10, user.token);
+    const res = await listEntity(entity, page, 10, user.token, params);
 
     if (!res.data.success) {
       setIsLoading(false);
