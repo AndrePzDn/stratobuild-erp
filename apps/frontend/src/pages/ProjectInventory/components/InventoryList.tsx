@@ -32,6 +32,19 @@ export default function InventoryList() {
     );
   }
 
+  if (data.length === 0) {
+    return (
+      <section className="flex flex-col items-center justify-center h-64 text-center">
+        <h2 className="text-xl font-semibold mb-2">
+          Este proyecto no tiene Artículos en Inventario
+        </h2>
+        <p className="text-gray-500">
+          Por favor, añade un artículo para comenzar desde el flujo de caja del proyecto
+        </p>
+      </section>
+    );
+  }
+
   return (
     <ul className="flex flex-col">
       {data.map((item, index) => (

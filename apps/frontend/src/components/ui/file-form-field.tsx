@@ -23,6 +23,7 @@ interface FileFormFieldProps<T extends FieldValues> {
   control: Control<T>;
   disabled?: boolean;
   value?: string | number | null;
+  accept?: string;
 }
 
 export default function FileFormField<T extends FieldValues>({
@@ -31,6 +32,7 @@ export default function FileFormField<T extends FieldValues>({
   control,
   disabled,
   value,
+  accept = "application/pdf, image/*",
 }: FileFormFieldProps<T>) {
   const { setValue } = useFormContext<T>();
   const data = useWatch({ name, control });
@@ -83,7 +85,7 @@ export default function FileFormField<T extends FieldValues>({
                 <Input
                   type="file"
                   disabled={disabled}
-                  accept="application/pdf, image/*"
+                  accept={accept}
                   defaultValue={value as string}
                   onChange={(e) => {
                     const file = e.target.files?.[0];

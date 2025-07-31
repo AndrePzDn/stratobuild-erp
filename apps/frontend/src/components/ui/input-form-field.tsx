@@ -10,7 +10,7 @@ import type { Control, FieldValues, Path } from "react-hook-form";
 
 interface InputFormFieldProps<T extends FieldValues> {
   name: Path<T>;
-  label: string;
+  label?: string;
   placeholder?: string;
   type?: string;
   control: Control<T>;
@@ -34,7 +34,7 @@ export const InputFormField = <T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
             <Input
               placeholder={placeholder}

@@ -93,6 +93,21 @@ export interface Task extends Entity {
   startDate: Date;
   endDate: Date;
   project: Project;
+  assignedResources: [
+    {
+      resource: Resource;
+      quantity: number;
+    }
+  ];
+  reports: ConstructionReport[] | null;
+}
+
+export interface ConstructionReport extends Entity {
+  name: string;
+  description: string;
+  date: Date;
+  imageUrl: string;
+  task: Task;
 }
 
 export interface Payment extends Entity {

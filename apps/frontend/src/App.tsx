@@ -22,6 +22,7 @@ import UsersPage from "./pages/Users/UsersPage";
 import UpdatePasswordPage from "./pages/UpdatePassword/UpdatePasswordPage";
 import CertificationPage from "./pages/Certification/CertificationPage";
 import ProjectInventoryPage from "./pages/ProjectInventory/ProjectInventoryPage";
+import ProjectReportsPage from "./pages/ProjectReports/ProjectReportsPage";
 
 function App() {
   return (
@@ -39,8 +40,18 @@ function App() {
             <Route path="/project/list/:page" element={<ProjectPage />} />
             <Route path="/project/planning/:id" element={<PlanningPage />} />
             <Route path="/project/payments/:id" element={<PaymentsPage />} />
-            <Route path="/project/certifications/:id" element={<CertificationPage />} />
-            <Route path="/project/inventory/:id" element={<ProjectInventoryPage />} />
+            <Route
+              path="/project/certifications/:id"
+              element={<CertificationPage />}
+            />
+            <Route
+              path="/project/inventory/:id"
+              element={<ProjectInventoryPage />}
+            />
+            <Route
+              path="/project/reports/:id"
+              element={<ProjectReportsPage />}
+            />
             <Route path="/customer" element={<ClientPage />} />
             <Route path="/quote" element={<QuotePage />} />
             <Route path="/invoice" element={<>Hola</>} />
@@ -55,7 +66,7 @@ function App() {
             <Route path="/about" element={<>Hola</>} />
           </Route>
         </Routes>
-        <ToastContainer />
+        <ToastContainer position="bottom-right"/>
       </Suspense>
     </BrowserRouter>
   );

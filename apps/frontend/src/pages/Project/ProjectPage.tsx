@@ -15,6 +15,7 @@ import {
   ArrowDownUp,
   ChartGantt,
   Files,
+  Images,
   LoaderCircleIcon,
   PackageOpen,
 } from "lucide-react";
@@ -130,6 +131,14 @@ export default function ProjectPage() {
                 </CardContent>
 
                 <CardFooter className="flex justify-end flex-wrap gap-4 mt-auto">
+                  <TooltipButton
+                    icon={<Images />}
+                    onClick={() =>
+                      navigate(`/project/reports/${project._id}`)
+                    }
+                  >
+                    Galeria
+                  </TooltipButton>
                   <TooltipButton
                     icon={<PackageOpen />}
                     onClick={() =>

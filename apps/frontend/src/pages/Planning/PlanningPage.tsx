@@ -101,9 +101,11 @@ export default function PlanningPage() {
     const { token } = user;
 
     try {
+      console.log(data);
+      
       const res = await patchEntity("task", taskToEdit._id, data, token);
 
-      if (res.data.success) {
+      if (res?.data.success) {
         setIsOpen(false);
         setTaskToEdit(null);
         refetch();
@@ -116,7 +118,7 @@ export default function PlanningPage() {
   const handleEditOnMove = async (
     taskId: string,
     from: Date,
-    to: Date | null,
+    to: Date | null
   ) => {
     if (!to || !user) return;
 
@@ -127,15 +129,13 @@ export default function PlanningPage() {
         "task",
         taskId,
         { startDate: from, endDate: to },
-        token,
+        token
       );
 
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task._id === taskId
-            ? { ...task, startDate: from, endDate: to }
-            : task,
-        ),
+          task._id === taskId ? { ...task, startDate: from, endDate: to } : task
+        )
       );
     } catch (error) {
       console.error("Error moving task:", error);
@@ -159,10 +159,10 @@ export default function PlanningPage() {
     Object.entries(groupedTaks)
       .sort(([, tasksA], [, tasksB]) => {
         const earliestDateA = Math.min(
-          ...tasksA.map((task) => new Date(task.startDate).getTime()),
+          ...tasksA.map((task) => new Date(task.startDate).getTime())
         );
         const earliestDateB = Math.min(
-          ...tasksB.map((task) => new Date(task.startDate).getTime()),
+          ...tasksB.map((task) => new Date(task.startDate).getTime())
         );
         return earliestDateA - earliestDateB;
       })
@@ -170,9 +170,9 @@ export default function PlanningPage() {
         category,
         tasks.sort(
           (a, b) =>
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
         ),
-      ]),
+      ])
   );
 
   useEffect(() => {

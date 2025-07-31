@@ -28,7 +28,7 @@ export default function useListEntity<T>(
       return;
     }
 
-    const res = await listEntity(entity, page, 10, user.token, params);
+    const res = await listEntity(entity, page, 100, user.token, params);
 
     if (!res.data.success) {
       setIsLoading(false);

@@ -31,7 +31,8 @@ export default function DialogTemplate({
 }: Props) {
   const sm = "";
   const lg = "min-w-2/3 max-w-2/3 max-h-5/6 overflow-auto";
-  const xl = "";
+  const xl = "min-w-3/4 max-w-3/4 max-h-5/6 overflow-auto";
+  const defaultSize = "max-h-5/6 overflow-auto";
 
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
@@ -43,7 +44,13 @@ export default function DialogTemplate({
       )}
       <DialogContent
         className={`${
-          size === "sm" ? sm : size === "lg" ? lg : size === "xl" ? xl : ""
+          size === "sm"
+            ? sm
+            : size === "lg"
+            ? lg
+            : size === "xl"
+            ? xl
+            : defaultSize
         }`}
       >
         <DialogHeader>

@@ -18,6 +18,17 @@ const schema = new mongoose.Schema({
   status: { type: String, enum: TaskEnum, default: 'not_started' },
 
   reports: [{ type: mongoose.Schema.ObjectId, ref: 'ConstructionReport', autopopulate: true }],
+  assignedResources: [
+    {
+      resource: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Resource',
+        autopopulate: true,
+        required: true,
+      },
+      quantity: { type: Number, min: 0 },
+    },
+  ],
   parentTask: { type: mongoose.Schema.ObjectId, ref: 'Task', autopopulate: true },
   project: { type: mongoose.Schema.ObjectId, ref: 'Project', autopopulate: true, required: true },
 });

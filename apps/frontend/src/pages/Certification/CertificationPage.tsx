@@ -41,11 +41,11 @@ export default function CertificationPage() {
         <CertificationForm refreshData={refreshData} />
       </header>
       {filteredData.length === 0 && (
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">
+        <div className="flex flex-col items-center justify-center h-64 text-center">
+          <h2 className="text-xl font-semibold mb-2">
             Este proyecto no tiene certificaciones
-          </h1>
-          <p className="mt-2">
+          </h2>
+          <p className="text-gray-500">
             Por favor, añade una certificación para comenzar.
           </p>
         </div>

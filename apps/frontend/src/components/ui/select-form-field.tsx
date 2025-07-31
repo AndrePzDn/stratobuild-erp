@@ -21,7 +21,7 @@ interface Option {
 
 interface SelectFormFieldProps<T extends FieldValues> {
   name: Path<T>;
-  label: string;
+  label?: string;
   options: Option[];
   control: Control<T>;
   placeholder?: string;
@@ -42,7 +42,7 @@ export const SelectFormField = <T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          {label && <FormLabel>{label}</FormLabel>}
           <Select
             onValueChange={field.onChange}
             defaultValue={field.value}
