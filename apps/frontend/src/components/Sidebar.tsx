@@ -59,10 +59,10 @@ export default function Sidebar() {
               <AccordionItem key={index} value={item.label}>
                 <AccordionTrigger
                   className={clsx(
-                    "flex items-center gap-3 px-3 py-2 rounded-md hover:bg-primary hover:text-primary-foreground",
+                    "flex items-center gap-3 px-3 py-2 rounded-md hover:bg-primary hover:text-primary-foreground font-semibold",
                     item.children &&
                       item.children.some(
-                        (child) => child.redirect === pathname
+                        (child) => child.redirect === (pathname.includes(child.redirect) ? child.redirect : null)
                       ) &&
                       "bg-secondary font-semibold text-secondary-foreground"
                   )}
