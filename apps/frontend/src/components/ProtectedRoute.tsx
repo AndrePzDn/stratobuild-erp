@@ -30,7 +30,7 @@ export const ProtectedRoute = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-auto relative">
+      <main className="flex-1 p-4 md:p-8 pt-16 md:pt-8 overflow-auto relative">
         <Outlet />
       </main>
     </div>

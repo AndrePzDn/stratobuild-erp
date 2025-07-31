@@ -83,15 +83,15 @@ export default function ProjectPage() {
       {Object.entries(projectServiceGrouped()).map(([service, projects]) => (
         <article key={service} className="flex flex-col gap-4 mb-8">
           <h2 className="text-lg font-semibold">{service}</h2>
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {projects.map((project) => (
               <Card key={project._id} className="w-full flex flex-col h-full">
                 <CardHeader className="flex items-center justify-between">
                   <div>
                     <CardTitle>{project.name}</CardTitle>
-                    <CardDescription>
+                    {/* <CardDescription>
                       {project.location || "Sin ubicación"}
-                    </CardDescription>
+                    </CardDescription> */}
                   </div>
                   <Badge variant={"outline"}>
                     {statusTranslate(project.status)}
