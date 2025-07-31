@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const shortid = require('shortid');
 
 const QuoteStatusEnum = ['pending', 'approved', 'rejected', 'expired', 'converted'];
 
@@ -11,6 +12,7 @@ const schema = new mongoose.Schema({
   converted: { type: Boolean, default: false },
   approved: { type: Boolean, default: false },
 
+  identifier: { type: String, unique: true, default: shortid.generate() },
   name: { type: String, required: true },
   date: { type: Date, required: true },
   expiredDate: { type: Date, required: true },

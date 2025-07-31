@@ -30,6 +30,7 @@ import {
   listEntity,
   patchEntity,
   postEntity,
+  sendMail as sendMailEntity,
 } from "@/utils/connections";
 
 import { normalizeItemToEdit } from "@/utils/normalizeFields";
@@ -57,6 +58,7 @@ interface Props<T extends z.ZodTypeAny> {
   editable?: boolean;
   convertible?: boolean;
   deletable?: boolean;
+  sendMail?: boolean;
   form?: ReactNode;
   schema?: T;
   dialogSize?: "default" | "sm" | "lg" | "xl";
@@ -68,8 +70,10 @@ interface TableRowActionsProps {
   onDelete?: (item: Entity) => void;
   onEdit?: (item: Entity) => void;
   onConvert?: (item: Entity) => void;
+  onSendMail?: (item: Entity) => void;
   deletable?: boolean;
   editable?: boolean;
+  sendMail?: boolean;
   convertible?: boolean;
 }
 
@@ -105,8 +109,10 @@ function TableRowActions({
   onDelete,
   onEdit,
   onConvert,
+  onSendMail,
   deletable = true,
   editable = true,
+  sendMail = false,
   convertible = false,
 }: TableRowActionsProps) {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -138,6 +144,15 @@ function TableRowActions({
             className="flex items-center justify-between gap-2"
           >
             Convertir
+            <ArrowUpRight />
+          </DropdownMenuItem>
+        )}
+        {sendMail && (
+          <DropdownMenuItem
+            onClick={() => onSendMail?.(item)}
+            className="flex items-center justify-between gap-2"
+          >
+            Enviar Correo
             <ArrowUpRight />
           </DropdownMenuItem>
         )}
@@ -175,6 +190,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   editable = false,
   convertible = false,
   deletable = true,
+  sendMail = false,
   form,
   schema,
   dialogSize = "default",
@@ -243,6 +259,13 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     await convertEntity(entity, item._id, user._id, user.token);
 
     fetchData();
+  };
+
+  const handleSendMail = async (item: Entity) => {
+    if (!user) return;
+
+    await sendMailEntity(entity, item._id, user.token);
+    console.log(`Sending email for item: ${item._id}`);
   };
 
   useEffect(() => {
@@ -361,9 +384,11 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                       onDelete={deletable ? handleDelete : undefined}
                       onEdit={editable ? handleEdit : undefined}
                       onConvert={convertible ? handleConvert : undefined}
+                      onSendMail={sendMail ? handleSendMail : undefined}
                       deletable={deletable}
                       editable={editable}
                       convertible={convertible}
+                      sendMail={sendMail}
                     />
                   </TableCell>
                 )}

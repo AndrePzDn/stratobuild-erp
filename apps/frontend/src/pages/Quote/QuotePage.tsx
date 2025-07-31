@@ -26,6 +26,7 @@ export default function QuotePage() {
       editable
       deletable
       convertible
+      sendMail={true}
       schema={QuoteSchema}
       form={<QuoteFieldValues />}
       dialogSize="lg"

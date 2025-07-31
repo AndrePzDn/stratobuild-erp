@@ -1,0 +1,87 @@
+doctype html
+html
+  head
+    title Presupuesto #{budget.name}
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2rem;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+      h1, h2, h3 {
+        color: #2c3e50;
+      }
+      .status {
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #007BFF;
+      }
+      .info p {
+        margin: 0.3rem 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+        background-color: #fff;
+      }
+      th {
+        background-color: #f0f0f0;
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 2px solid #ccc;
+      }
+      td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .totals {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 2px solid #ccc;
+      }
+      .totals p, .totals h3 {
+        margin: 0.5rem 0;
+      }
+
+  body
+    h1 Presupuesto: #{budget.name}
+    if budget.identifier
+      h2 Identificador: #{budget.identifier}
+
+    .info
+      p Estado: 
+        span.status #{budget.status}
+      p Creado por: #{budget.created_by.name} #{budget.created_by.surname}
+      p Cliente: #{budget.client.name}
+      p Fecha: #{budget.date.toLocaleDateString("es-ES")}
+      if budget.note
+        p Nota: #{budget.note}
+      if budget.quote
+        p Cotización asociada: #{budget.quote.name}
+
+    h2 Ítems
+    table
+      thead
+        tr
+          th Item
+          th Cantidad
+          th Precio Unitario
+          th Total
+      tbody
+        each item in budget.items
+          tr
+            td #{item.priceBank.resource.name || 'N/A'}
+            td #{item.quantity}
+            td BOB #{item.priceBank.unitPrice.toFixed(2) || '0.00'}
+            td BOB #{item.total.toFixed(2) || '0.00'}
+
+    .totals
+      p Subtotal: BOB #{budget.subTotal.toFixed(2) || '0.00'}
+      p Tasa de Impuesto: #{budget.taxRate || 0}%
+      p Total Impuestos: BOB #{budget.taxTotal.toFixed(2) || '0.00'}
+      p Pagado: BOB #{budget.amountPaid.toFixed(2) || '0.00'}
+      h3 Total: BOB #{budget.total.toFixed(2) || '0.00'}

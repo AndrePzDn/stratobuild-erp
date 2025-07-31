@@ -21,8 +21,8 @@ const routerApp = (entity, controller) => {
   mapRoute('/filter', 'get', 'filter');
   mapRoute('/summary', 'get', 'summary');
 
-  if (entity === 'invoice' || entity === 'quote' || entity === 'payment') {
-    mapRoute('mail', 'post', 'mail');
+  if (entity === 'invoice' || entity === 'quote' || entity === 'payment' || entity === 'budget') {
+    mapRoute('/mail/:id', 'post', 'mail');
   }
 
   if (entity === 'quote' || entity === 'budget') {

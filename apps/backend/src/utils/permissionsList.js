@@ -11,6 +11,7 @@ const permissions = {
       'filter',
       'summary',
       'convert',
+      'mail'
     ],
     cashflow: [
       'create',
@@ -217,6 +218,7 @@ const permissions = {
       'filter',
       'summary',
       'convert',
+      'mail'
     ],
     cashflow: ['read', 'search', 'list', 'filter', 'summary'],
     certification: ['create', 'read', 'update', 'delete', 'search', 'list', 'filter', 'summary'],
@@ -251,7 +253,7 @@ const permissions = {
   },
 
   Accountant: {
-    budget: ['read', 'search', 'list', 'summary'],
+    budget: ['read', 'search', 'list', 'summary', 'mail'],
     cashflow: ['read', 'search', 'list', 'filter', 'summary'],
     certification: ['read', 'search', 'list', 'summary'],
     client: ['read', 'search', 'list'],

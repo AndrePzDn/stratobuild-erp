@@ -30,6 +30,7 @@ export default function BudgetPage() {
       editable
       canBeCreated={false}
       deletable={false}
+      sendMail
       convertible={true}
       dialogSize="lg"
       schema={BudgetSchema}

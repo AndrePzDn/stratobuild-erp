@@ -180,3 +180,22 @@ export const convertEntity = async (
   }
   toast.success("Conversión exitosa");
 };
+
+export const sendMail = async (entity: string, id: string, token: string) => {
+  toast.promise(
+    axios.post(
+      `${BASE_URL}/${entity}/mail/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ),
+    {
+      pending: "Enviando correo...",
+      success: "Correo enviado exitosamente",
+      error: "Error al enviar el correo",
+    }
+  );
+};

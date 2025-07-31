@@ -1,0 +1,83 @@
+doctype html
+html
+  head
+    title Quote #{quote.name}
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2rem;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+      h1, h2, h3 {
+        color: #2c3e50;
+      }
+      .status {
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #007BFF;
+      }
+      .info p {
+        margin: 0.3rem 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+        background-color: #fff;
+      }
+      th {
+        background-color: #f0f0f0;
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 2px solid #ccc;
+      }
+      td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .totals {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 2px solid #ccc;
+      }
+      .totals p, .totals h3 {
+        margin: 0.5rem 0;
+      }
+
+  body
+    h1 Cotización: #{quote.name}
+    if quote.identifier
+      h2 Identificador: #{quote.identifier}
+
+    .info
+      p Estado: 
+        span.status #{quote.status}
+      p Creado por: #{quote.created_by.name} #{quote.created_by.surname}
+      p Cliente: #{quote.client.name}
+      p Fecha: #{quote.date.toLocaleDateString("es-ES")}
+      p Fecha de expiración: #{quote.expiredDate.toLocaleDateString("es-ES")}
+      if quote.note
+        p Nota: #{quote.note}
+
+    h2 Ítems
+    table
+      thead
+        tr
+          th Ítem
+          th Descripción
+          th Precio
+      tbody
+        each item in quote.items
+          tr
+            td #{item.itemName}
+            td #{item.description}
+            td BOB #{item.price.toFixed(2)}
+
+    .totals
+      p Subtotal: BOB #{quote.subTotal.toFixed(2) || '0.00'}
+      p Tasa de Impuesto: #{quote.taxRate || 0}%
+      p Total Impuestos: BOB #{quote.taxTotal.toFixed(2) || '0.00'}
+      h3 Total: BOB #{quote.total.toFixed(2) || '0.00'}
