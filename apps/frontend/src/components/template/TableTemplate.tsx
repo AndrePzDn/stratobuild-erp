@@ -73,6 +73,33 @@ interface TableRowActionsProps {
   convertible?: boolean;
 }
 
+const translateStatus = (status: string) => {
+  switch (status) {
+    case "draft":
+      return "Borrador";
+    case "pending":
+      return "Pendiente";
+    case "approved":
+      return "Aprobado";
+    case "rejected":
+      return "Rechazado";
+    case "in_progress":
+      return "En Progreso";
+    case "done":
+      return "Completado";
+    case "expired":
+      return "Expirado";
+    case "active":
+      return "Activo";
+    case "inactive":
+      return "Inactivo";
+    case "converted":
+      return "Convertido";
+    default:
+      return status;
+  }
+};
+
 function TableRowActions({
   item,
   onDelete,
@@ -304,6 +331,21 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                           return (
                             <span className="text-sm">
                               {Array.isArray(value) ? value.join(", ") : ""}
+                            </span>
+                          );
+
+                        case "status":
+                          return (
+                            <span
+                              className={`text-sm ${
+                                value === "active"
+                                  ? "text-green-600"
+                                  : value === "inactive"
+                                  ? "text-red-600"
+                                  : "text-gray-600"
+                              }`}
+                            >
+                              {translateStatus(value)}
                             </span>
                           );
                         default:

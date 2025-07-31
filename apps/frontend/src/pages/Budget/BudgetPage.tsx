@@ -9,7 +9,7 @@ export default function BudgetPage() {
       { label: "Cliente", name: "client.name" },
       { label: "Sub Total", name: "subTotal" },
       { label: "Total", name: "total" },
-      { label: "Estado", name: "status" },
+      { label: "Estado", name: "status", type: "status" },
     ],
     labelName: "Presupuestos",
   };
