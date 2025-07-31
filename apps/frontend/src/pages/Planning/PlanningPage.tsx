@@ -285,7 +285,7 @@ export default function PlanningPage() {
         trigger={false}
         initialData={
           taskToEdit
-            ? normalizeItemToEdit(taskToEdit, ["project", "reports"])
+            ? normalizeItemToEdit(taskToEdit, ["project", "reports", "assignedResources.resource"])
             : undefined
         }
       >

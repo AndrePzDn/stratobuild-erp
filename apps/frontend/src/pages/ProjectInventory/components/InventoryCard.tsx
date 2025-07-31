@@ -25,9 +25,6 @@ export default function InventoryCard({ item }: Props) {
           Total Recurso: {item.quantity}{" "}
           {item.resource.unitOfMeasurement.symbol}
         </span>
-        <Button type="button" className="mt-2">
-          Asignar
-        </Button>
       </section>
     </li>
   );
