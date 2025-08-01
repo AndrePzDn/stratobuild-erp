@@ -11,6 +11,8 @@ from pipeline.transformers.dim_resouce_transformer import transform_dim_resource
 from pipeline.transformers.dim_task_transformer import transform_dim_task
 from pipeline.transformers.fact_budget_transformer import transform_fact_budget
 from pipeline.transformers.fact_cash_flow_transformer import transform_fact_cash_flow
+from pipeline.transformers.fact_inventory_assignment_transformer import transform_fact_inventory_assignment
+from pipeline.transformers.fact_inventory_transformer import transform_fact_inventory
 from pipeline.transformers.fact_payment_transformer import transform_fact_payment
 from pipeline.transformers.fact_project_task_transformer import transform_fact_project_task
 from pipeline.transformers.fact_quote_transformer import transform_fact_quote
@@ -101,6 +103,21 @@ PIPELINE_CONFIG = [
         "sources": [{"key": "quotes", "collection": "quotes", "type": "incremental"}],
         "transformer": transform_fact_quote,
         "destination_table": "fact_quote"
+    },
+    {
+        "name": "Inventory Fact Table",
+        "sources": [{"key": "projectinventories", "collection": "projectinventories", "type": "incremental"}],
+        "transformer": transform_fact_inventory,
+        "destination_table": "fact_inventory"
+    },
+    {
+        "name": "Inventory Assignment Fact Table",
+        "sources": [
+            {"key": "tasks", "collection": "tasks", "type": "incremental"},
+            {"key": "projectinventories", "collection": "projectinventories", "type": "full"}
+        ],
+        "transformer": transform_fact_inventory_assignment,
+        "destination_table": "fact_inventory_assignment"
     }
 ]
 

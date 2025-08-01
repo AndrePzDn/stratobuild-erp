@@ -94,7 +94,10 @@ const update = async (Model, req, res) => {
       _id: req.params.id,
       removed: false,
     },
-    req.body,
+    {
+      ...req.body,
+      updated: new Date(),
+    },
     {
       new: true,
       runValidators: true,
