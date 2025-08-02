@@ -17,7 +17,7 @@ export const PlanningSchema = z.object({
     .min(0, "El progreso debe ser al menos 0")
     .max(100, "El progreso no puede ser mayor a 100")
     .default(0),
-  startDate: z
+  estimatedStartDate: z
     .string({ message: "La fecha inicial es requerida" })
     .transform((val) => {
       const date = new Date(val);
@@ -27,7 +27,7 @@ export const PlanningSchema = z.object({
       return date;
     }),
 
-  endDate: z
+  estimatedEndDate: z
     .string({ message: "La fecha final es requerida" })
     .transform((val) => {
       const date = new Date(val);

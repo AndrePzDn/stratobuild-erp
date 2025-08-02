@@ -5,15 +5,26 @@ import { SelectFormField } from "@/components/ui/select-form-field";
 import useFetchData from "@/hooks/useFetchEntityData";
 import type { Resource } from "@/types";
 import { Trash2 } from "lucide-react";
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import type { PlanningSchemaType } from "../schemas/planning.schema";
 
 export default function TaskFormValues() {
   const { data: resources } = useFetchData<Resource>("resource");
-  const { control } = useFormContext();
+  const { control, getValues, setValue } = useFormContext<PlanningSchemaType>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "assignedResources",
   });
+
+  useEffect(() => {
+    if (getValues('estimatedStartDate')) {
+      setValue('estimatedStartDate', new Date(getValues('estimatedStartDate')));
+    }
+    if (getValues('estimatedEndDate')) {
+      setValue('estimatedEndDate', new Date(getValues('estimatedEndDate')));
+    }
+  }, [getValues, setValue])
 
   return (
     <section className="flex flex-col">
@@ -44,12 +55,12 @@ export default function TaskFormValues() {
       />
       <CalendarFormField
         control={control}
-        name="startDate"
+        name="estimatedStartDate"
         label="Fecha de Inicio"
       />
       <CalendarFormField
         control={control}
-        name="endDate"
+        name="estimatedEndDate"
         label="Fecha de Fin"
       />
       <SelectFormField

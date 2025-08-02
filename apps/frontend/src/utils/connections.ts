@@ -176,6 +176,7 @@ export const convertEntity = async (
   );
 
   if (!res) {
+    toast.error("Error al convertir la entidad");
     return;
   }
   toast.success("Conversión exitosa");

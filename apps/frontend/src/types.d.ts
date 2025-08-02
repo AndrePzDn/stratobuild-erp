@@ -90,8 +90,8 @@ export interface Task extends Entity {
   category: string;
   progress: number;
   status: "not_started" | "in_progress" | "completed" | "on_hold" | "delayed";
-  startDate: Date;
-  endDate: Date;
+  estimatedStartDate: Date;
+  estimatedEndDate: Date;
   project: Project;
   assignedResources: [
     {
