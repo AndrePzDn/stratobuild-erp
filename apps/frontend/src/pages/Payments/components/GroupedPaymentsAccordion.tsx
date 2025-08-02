@@ -31,11 +31,11 @@ export default function GroupedPaymentsAccordion({ groupedPayments }: Props) {
       {payments.map((payment) => (
         <li
           key={payment._id}
-          className="flex justify-between hover:bg-muted/50 text-xs border-b border-secondary last:border-0 pb-2 last:pb-0"
+          className="grid grid-cols-4 hover:bg-muted/50 text-xs border-b border-secondary last:border-0 pb-2 last:pb-0"
         >
-          <span>{payment.description}</span>
-          <span>{new Date(payment.date).toLocaleDateString("es-BO")}</span>
-          <span className="font-medium">{payment.amount}</span>
+          <span className="col-span-2">{payment.description}</span>
+          <span className="text-center">{new Date(payment.date).toLocaleDateString("es-BO")}</span>
+          <span className="font-medium text-end">{payment.amount}</span>
         </li>
       ))}
     </ul>

@@ -10,6 +10,7 @@ import type { SelectableForm } from "@/components/template/SelectableFormTemplat
 import { Plus } from "lucide-react";
 import ExpenseForm from "./components/ExpenseForm";
 import ResourceExpenseForm from "./components/ResourceExpenseForm";
+import { GrafanaDashboard, type DashboardConfig } from "@/components/dashboard";
 
 export default function PaymentsPage() {
   const { id } = useParams();
@@ -18,7 +19,11 @@ export default function PaymentsPage() {
   const { data: allPayments, refetch: refetchPayments } =
     useFetchData<Payment>("payment");
   const { data: cashFlows } = useFetchData<CashFlow>("cashFlow");
-  const { data: project } = useFetchData<Project>("project", id);
+  const { data: projects } = useFetchData<Project>("project", id);
+
+  const project = useMemo(() => {
+    return Array.isArray(projects) ? projects.find(p => p._id === id) : projects;
+  }, [projects, id]);
 
   const paymentsForProject = useMemo(() => {
     return allPayments?.filter((p) => p.cashFlow.project._id === id) ?? [];
@@ -41,6 +46,25 @@ export default function PaymentsPage() {
   }, [cashFlows, id]);
 
   const [open, setOpen] = useState(false);
+
+  const dashboardConfig: DashboardConfig = {
+    grafanaBase: "http://localhost",
+    dashboardUid: "beop9bu7wjif4f",
+    dashboardPath: "new-dashboard",
+    folderUid: "",
+    orgId: "1",
+    panels: [
+      { id: 10, title: "Análisis de Pagos", height: 400 },
+    ],
+    variables: [
+      {
+        key: "Proyecto",
+        displayName: "Proyecto",
+        query: "SELECT DISTINCT project_name FROM dim_project ORDER BY project_name",
+        datasourceId: 1,
+      },
+    ],
+  };
 
   const forms: SelectableForm[] = [
     {
@@ -69,7 +93,7 @@ export default function PaymentsPage() {
     <div className="flex flex-col gap-8">
       <header className="flex justify-between items-center">
         <h1 className="text-xl font-bold">
-          Flujo de Caja de {project.name || ""}
+          Flujo de Caja de {project?.name || ""}
         </h1>
       </header>
 
@@ -99,6 +123,17 @@ export default function PaymentsPage() {
               buttonIcon={<Plus />}
             />
           }
+        />
+      </section>
+      <section>
+        <GrafanaDashboard
+          config={dashboardConfig}
+          title="Análisis de Pagos del Proyecto"
+          showDatePicker={true}
+          showFilters={false}
+          defaultFilters={{
+            Proyecto: project?.name ? [project.name] : [],
+          }}
         />
       </section>
     </div>

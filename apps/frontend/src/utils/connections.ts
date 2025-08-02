@@ -5,7 +5,7 @@ import axios from "axios";
 import { ErrorResponse, handleConnectionPetition } from "./errorHandler";
 import type { UpdatePasswordSchemaType } from "@/pages/UpdatePassword/schemas/updatePassword.schema";
 
-const BASE_URL = "/api";
+const BASE_URL = "/backend-erp";
 
 export const loginUser = (values: LoginFormValues) => {
   return axios.post(

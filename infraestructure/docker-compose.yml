@@ -14,6 +14,9 @@ services:
     depends_on:
       - mongo
       - grafana
+    dns:
+    - 8.8.8.8
+    - 8.8.4.4
 
   frontend:
     build: ../apps/frontend
@@ -46,14 +49,16 @@ services:
       - "8123:8123"
       - "9000:9000"
     volumes:
-      - clickhouse-data:/var/lib/clickhouse
+      - clickhouse-data-new:/var/lib/clickhouse
       - ./clickhouse/config/:/etc/clickhouse-server/users.d/
     environment:
       - CLICKHOUSE_DB=default
     ulimits:
       nofile:
         soft: 262144 
-        hard: 262144 
+        hard: 262144
+    networks:
+      - server-mongo 
 
   grafana:
     image: grafana/grafana-enterprise
@@ -62,8 +67,29 @@ services:
       - "5000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_AUTH_DISABLE_LOGIN_FORM=false
+      - GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION=false
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+      - GF_PANELS_DISABLE_SANITIZE_HTML=true
+      - GF_SECURITY_COOKIE_SAMESITE=none
+      - GF_SECURITY_COOKIE_SECURE=false
+      - GF_AUTH_PROXY_ENABLED=false
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=""
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_USERS_ALLOW_ORG_CREATE=false
+      - GF_USERS_AUTO_ASSIGN_ORG=true
+      - GF_USERS_AUTO_ASSIGN_ORG_ID=1
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - clickhouse
+    networks:
+      - server-mongo
 
   nginx:
     image: nginx:latest
@@ -81,7 +107,7 @@ volumes:
   mongodb_data:
   backend_node_modules:
   frontend_node_modules:
-  clickhouse-data:
+  clickhouse-data-new:
   grafana_data:
 
 networks:

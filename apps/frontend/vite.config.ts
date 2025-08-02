@@ -10,15 +10,25 @@ export default defineConfig({
     host: true,
     port: 5173,
     proxy: {
-      "/api/ds/query": {
+      "/api/": {
         target: "http://localhost:5000",
         changeOrigin: true,
         secure: false,
       },
-      "/api/": {
+      "/d-solo/": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/public/": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/backend-erp/": {
         target: "http://localhost",
         changeOrigin: true,
-        rewrite: (path: string) => path.replace(/^\/api/, ""),
+        rewrite: (path: string) => path.replace(/^\/backend-erp/, ""),
       },
     },
   },
