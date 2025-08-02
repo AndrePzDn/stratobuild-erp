@@ -8,16 +8,15 @@ const PriceBankModel = mongoose.model('PriceBank');
 const create = async (Model, req, res) => {
   req.body.removed = false;
 
+  const cashFlow = await CashFlowModel.findById(req.body.cashFlow);
+  if (!cashFlow) {
+    return res.status(404).json({
+      success: false,
+      message: 'CashFlow not found',
+    });
+  }
+
   if (req.body.paymentType === 'resource') {
-    const cashFlow = await CashFlowModel.findById(req.body.cashFlow);
-
-    if (!cashFlow) {
-      return res.status(404).json({
-        success: false,
-        message: 'CashFlow not found',
-      });
-    }
-
     const projectInventory = await ProjectInventoryModel.findOne({ project: cashFlow.project });
 
     if (!projectInventory) {
@@ -74,6 +73,16 @@ const create = async (Model, req, res) => {
       cashFlow: req.body.cashFlow,
     };
   }
+
+  if (req.body.paymentType === 'income') {
+    cashFlow.availableBudget += req.body.amount;
+  } else {
+    cashFlow.availableBudget -= req.body.amount;
+    cashFlow.total += req.body.amount;
+  }
+  cashFlow.updated = Date.now();
+
+  await cashFlow.save();
 
   const result = await new Model({
     ...req.body,

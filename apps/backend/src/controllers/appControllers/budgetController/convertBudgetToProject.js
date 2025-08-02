@@ -25,16 +25,14 @@ const convertBudgetToProject = async (Model, req, res) => {
   if (budget.status !== 'approved') {
     return res.status(400).json({
       success: false,
-      result: null,
-      message: 'Budget must be approved before conversion',
+      message: 'La cotizacion tiene que estar aprobada para convertirla en proyecto',
     });
   }
 
   if (budget.converted) {
     return res.status(409).json({
       success: false,
-      result: null,
-      message: 'Budget is already converted to a budget',
+      message: 'El presupuesto ya ha sido convertido a proyecto',
     });
   }
 
@@ -60,8 +58,8 @@ const convertBudgetToProject = async (Model, req, res) => {
     name: 'Nueva Tarea',
     category: 'Sin Categoria',
     progress: 0,
-    startDate: new Date(),
-    endDate: moment().add(1, 'month').toDate(),
+    estimatedStartDate: new Date(),
+    estimatedEndDate: moment().add(1, 'month').toDate(),
     status: 'not_started',
     project: project._id,
   };

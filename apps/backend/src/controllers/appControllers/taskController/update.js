@@ -87,6 +87,22 @@ const update = async (Model, req, res) => {
     });
   }
 
+  const today = new Date();
+
+  if (req.body.status === 'in_progress') {
+    req.body = {
+      ...req.body,
+      startDate: today,
+    };
+  }
+
+  if (req.body.status === 'completed') {
+    req.body = {
+      ...req.body,
+      endDate: today,
+    };
+  }
+
   await projectInventory.save();
 
   const result = await Model.findOneAndUpdate(
