@@ -1,26 +1,28 @@
 import pandas as pd
 
 def transform_fact_project_task(data: dict):
-
     tasks = data.get("tasks", [])
 
-    if not all([tasks]):
+    if not tasks:
         return pd.DataFrame()
 
     df_tasks = pd.DataFrame(tasks)
 
-    df_tasks.rename(columns={
+    rename_map = {
         '_id': 'task_id',
         'project': 'project_id',
-        'startDate': 'estimated_start_date',
-        'endDate': 'estimated_end_date',
-        'estimatedStartDate': 'actual_start_date',
-        'estimatedEndDate': 'actual_end_date',
+        'estimatedStartDate': 'estimated_start_date',
+        'estimatedEndDate': 'estimated_end_date',
+        'startDate': 'actual_start_date',
+        'endDate': 'actual_end_date',
         'status': 'status',
-        'progress': 'progress'
-    }, inplace=True)
+        'progress': 'progress',
+        'updated': 'updated'
+    }
 
-    df_final = df_tasks[[
+    df_tasks.rename(columns={k: v for k, v in rename_map.items() if k in df_tasks.columns}, inplace=True)
+
+    required_columns = [
         "task_id",
         "project_id",
         "estimated_start_date",
@@ -30,11 +32,16 @@ def transform_fact_project_task(data: dict):
         "status",
         "progress",
         "updated"
-    ]].copy()
+    ]
 
-    df_final['task_id'] = df_final['task_id'].astype(str)
-    df_final['project_id'] = df_final['project_id'].astype(str)
+    df_final = df_tasks.reindex(columns=required_columns).copy()
+
+    df_final["task_id"] = df_final["task_id"].astype(str)
+    df_final["project_id"] = df_final["project_id"].astype(str)
+
+    df_final["updated"] = pd.to_datetime(df_final["updated"], errors="coerce")
+
     df_final = df_final.replace({pd.NaT: None})
-    df_final['updated'] = pd.to_datetime(df_final['updated'])
 
     return df_final
+

@@ -16,6 +16,10 @@ def transform_fact_inventory_assignment(data: dict):
     df_tasks = df_tasks.explode('assignedResources')
 
     df_tasks_explode = df_tasks['assignedResources'].apply(pd.Series).drop(columns=['_id'])
+
+    if df_tasks_explode.empty:
+        return pd.DataFrame()
+
     df_tasks = df_tasks.drop(columns=['assignedResources']).join(df_tasks_explode).rename(columns={'resource': 'resource_id'})
 
     df_tasks.rename(
@@ -34,9 +38,10 @@ def transform_fact_inventory_assignment(data: dict):
     df_inventories.drop(columns=['removed', '__v', 'created', 'updated'], inplace=True)
 
     df = df_tasks.merge(df_inventories, on='project_id', how='left')
-    df['assignment_id'] = df.apply(
-        lambda row: f"{row['task_id']}_{row['resource_id']}_{row['inventory_id']}",
-        axis=1
+    df['assignment_id'] = (
+        df['task_id'].astype(str) + "_" +
+        df['resource_id'].astype(str) + "_" +
+        df['inventory_id'].astype(str)
     )
 
     df_final = df[[
