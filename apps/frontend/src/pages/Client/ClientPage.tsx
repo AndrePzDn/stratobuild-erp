@@ -21,6 +21,9 @@ export default function ClientPage() {
       schema={ClientSchema}
       form={<ClientFormFields />}
       editable
+      searchable
+      searchField="name"
+      searchPlaceholder="Buscar clientes por nombre..."
     />
   );
 }

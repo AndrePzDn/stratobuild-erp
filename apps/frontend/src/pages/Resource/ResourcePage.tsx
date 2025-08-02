@@ -24,6 +24,9 @@ export default function ResourcePage() {
       form={<ResourceFormFields />}
       normalizeFields={normalizeFields}
       editable
+      searchable
+      searchField="name"
+      searchPlaceholder="Buscar recursos por nombre o tipo..."
     />
   );
 }

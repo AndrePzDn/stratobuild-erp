@@ -5,6 +5,7 @@ import QuoteFieldValues from "./components/QuoteForm";
 export default function QuotePage() {
   const config = {
     tableHead: [
+      { label: "Identificador", name: "identifier" },
       { label: "Nombre", name: "name" },
       { label: "Cliente", name: "client.name" },
       { label: "Fecha", name: "date", type: "date" },
@@ -31,6 +32,9 @@ export default function QuotePage() {
       form={<QuoteFieldValues />}
       dialogSize="lg"
       normalizeFields={normalizeFields}
+      searchable
+      searchField="identifier"
+      searchPlaceholder="Buscar Cotizaciones por identificador..."
     />
   );
 }

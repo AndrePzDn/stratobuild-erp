@@ -21,6 +21,9 @@ export default function CurrencyPage() {
       form={<CurrencyFieldValues />}
       canBeCreated
       deletable={false}
+      searchable
+      searchField="symbol"
+      searchPlaceholder="Buscar divisas por simbolo..."
     />
   );
 }

@@ -5,6 +5,7 @@ import BudgetFieldValues from "./components/BudgetForm";
 export default function BudgetPage() {
   const config = {
     tableHead: [
+      { label: "Identificador", name: "identifier" },
       { label: "Nombre", name: "name" },
       { label: "Cliente", name: "client.name" },
       { label: "Sub Total", name: "subTotal" },
@@ -36,6 +37,9 @@ export default function BudgetPage() {
       schema={BudgetSchema}
       form={<BudgetFieldValues />}
       normalizeFields={normalizeFields}
+      searchable
+      searchField="identifier"
+      searchPlaceholder="Buscar presupuestos por identificador..."
     />
   );
 }

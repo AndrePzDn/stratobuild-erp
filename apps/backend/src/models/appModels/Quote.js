@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
   converted: { type: Boolean, default: false },
   approved: { type: Boolean, default: false },
 
-  identifier: { type: String, unique: true, default: shortid.generate() },
+  identifier: { type: String, unique: true, default: shortid.generate().toUpperCase() },
   name: { type: String, required: true },
   date: { type: Date, required: true },
   expiredDate: { type: Date, required: true },

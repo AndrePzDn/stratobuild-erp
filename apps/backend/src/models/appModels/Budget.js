@@ -16,7 +16,7 @@ const schema = new mongoose.Schema({
   date: { type: Date, required: true },
   status: { type: String, enum: BudgetStatusEnum, default: 'draft' },
   amountPaid: { type: Number, default: 0 },
-  identifier: { type: String, unique: true, default: shortid.generate()},
+  identifier: { type: String, unique: true, default: shortid.generate().toUpperCase() },
 
   taxRate: { type: Number },
   subTotal: { type: Number },

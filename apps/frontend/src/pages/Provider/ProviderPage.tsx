@@ -20,6 +20,9 @@ export default function ProviderPage() {
       editable
       schema={ProviderSchema}
       form={<ProviderFieldValues />}
+      searchable
+      searchField="name"
+      searchPlaceholder="Buscar proveedores por nombre..."
     />
   );
 }

@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import FormDialog from "@/pages/Client/components/FormDialog";
 
 import {
@@ -21,6 +22,7 @@ import {
   Edit,
   EllipsisVertical,
   Plus,
+  Search,
   Trash,
 } from "lucide-react";
 
@@ -63,6 +65,9 @@ interface Props<T extends z.ZodTypeAny> {
   schema?: T;
   dialogSize?: "default" | "sm" | "lg" | "xl";
   normalizeFields?: string[];
+  searchable?: boolean;
+  searchField?: string;
+  searchPlaceholder?: string;
 }
 
 interface TableRowActionsProps {
@@ -195,6 +200,9 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   schema,
   dialogSize = "default",
   normalizeFields,
+  searchable = false,
+  searchField = "name",
+  searchPlaceholder = "Buscar...",
 }: Props<T>) {
   const haveOptions = editable || convertible || deletable;
   const { user } = useAuthStore();
@@ -202,17 +210,40 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<Entity | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const fetchData = useCallback(async () => {
     if (!user) return;
 
     const { token } = user;
-    const res = await listEntity(entity, 1, 100, token);
-    setItems(res.data.result);
-  }, [entity, user]);
+    const params: Record<string, string | number> = {};
+    
+    if (searchable && debouncedSearchTerm && searchField) {
+      params.q = debouncedSearchTerm;
+      params.fields = searchField;
+    }
 
-  const getNestedValue = (obj: any, path: string) => {
-    return path.split(".").reduce((acc, part) => acc?.[part], obj);
+    const res = await listEntity(entity, 1, 100, token, params);
+    setItems(res.data.result);
+  }, [entity, user, debouncedSearchTerm, searchable, searchField]);
+
+  const getNestedValue = (obj: Record<string, unknown>, path: string): unknown => {
+    return path.split(".").reduce((acc: unknown, part) => {
+      if (acc && typeof acc === 'object' && part in acc) {
+        return (acc as Record<string, unknown>)[part];
+      }
+      return undefined;
+    }, obj);
   };
 
   const handleCreate = async (data: z.infer<T>) => {
@@ -291,6 +322,20 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
           </FormDialog>
         )}
       </nav>
+
+      {searchable && (
+        <div className="flex items-center gap-2 max-w-sm">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder={searchPlaceholder}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </div>
+      )}
 
       <div className="border rounded-md bg-white text-black max-h-[85dvh] min-h-[85dvh] overflow-y-auto">
         <Table>

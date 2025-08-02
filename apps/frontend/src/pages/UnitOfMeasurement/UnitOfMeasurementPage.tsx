@@ -20,6 +20,9 @@ export default function UnitOfMeasurementPage() {
       form={<UnitOfMeasurementFieldValues />}
       editable
       canBeCreated
+      searchable
+      searchField="name"
+      searchPlaceholder="Buscar unidades de medida por nombre..."
     />
   );
 }
