@@ -3,6 +3,10 @@ const shortid = require('shortid');
 
 const QuoteStatusEnum = ['pending', 'approved', 'rejected', 'expired', 'converted'];
 
+const generateIdentifier = () => {
+  return `COT-${shortid.generate().slice(0, 6).toUpperCase()}`;
+};
+
 const schema = new mongoose.Schema({
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now },
@@ -12,7 +16,7 @@ const schema = new mongoose.Schema({
   converted: { type: Boolean, default: false },
   approved: { type: Boolean, default: false },
 
-  identifier: { type: String, unique: true, default: shortid.generate().toUpperCase() },
+  identifier: { type: String, unique: true, default: generateIdentifier },
   name: { type: String, required: true },
   date: { type: Date, required: true },
   expiredDate: { type: Date, required: true },

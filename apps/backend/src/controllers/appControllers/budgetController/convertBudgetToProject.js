@@ -42,8 +42,9 @@ const convertBudgetToProject = async (Model, req, res) => {
     client: budget.client,
     serviceType: budget.serviceType,
     projectType: budget.projectType,
-    endDate: moment().add(1, 'year').toDate(),
+    endDate: budget.endDate,
     budget: budget,
+    estimatedPrice: budget.total,
     createdBy,
   };
 

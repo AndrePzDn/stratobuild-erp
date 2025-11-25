@@ -44,7 +44,7 @@ const setup = async (req, res) => {
   const accountOwnner = {
     email,
     name,
-    role: 'owner',
+    role: 'Admin',
   };
   const result = await new Admin(accountOwnner).save();
 

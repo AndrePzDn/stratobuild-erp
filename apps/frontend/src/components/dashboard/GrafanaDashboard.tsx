@@ -3,7 +3,13 @@ import { DateRangePicker } from "@/components/ui/date-picker-range";
 import DashboardFilters from "./DashboardFilters";
 import DashboardPanel from "./DashboardPanel";
 import { buildGrafanaUrl, fetchDashboardVariables } from "./utils";
-import type { DashboardConfig, DateRange, DashboardFilters as Filters, PanelConfig } from "./types";
+import type {
+  DashboardConfig,
+  DateRange,
+  DashboardFilters as Filters,
+  PanelConfig,
+} from "./types";
+import KPIDashboard from "./KPIDashboard";
 
 interface PanelWithUrl {
   panel: PanelConfig;
@@ -18,6 +24,7 @@ interface GrafanaDashboardProps {
   className?: string;
   showFilters?: boolean;
   defaultFilters?: Filters;
+  onFiltersChange?: (filters: Filters) => void;
 }
 
 export default function GrafanaDashboard({
@@ -28,8 +35,11 @@ export default function GrafanaDashboard({
   customLayout,
   className = "",
   defaultFilters = {},
+  onFiltersChange,
 }: GrafanaDashboardProps) {
-  const [availableFilters, setAvailableFilters] = useState<Record<string, string[]>>({});
+  const [availableFilters, setAvailableFilters] = useState<
+    Record<string, string[]>
+  >({});
   const [selectedFilters, setSelectedFilters] = useState<Filters>({});
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -38,10 +48,11 @@ export default function GrafanaDashboard({
   });
 
   const handleFilterChange = (key: string, values: string[]) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [key]: values,
-    }));
+    setSelectedFilters((prev) => {
+      const updated = { ...prev, [key]: values };
+      if (onFiltersChange) onFiltersChange(updated);
+      return updated;
+    });
   };
 
   useEffect(() => {
@@ -61,6 +72,7 @@ export default function GrafanaDashboard({
           initialSelected[variable.key] = defaultFilters[variable.key] || [];
         });
         setSelectedFilters(initialSelected);
+        if (onFiltersChange) onFiltersChange(initialSelected);
       } catch (error) {
         console.error("Error fetching variables:", error);
       } finally {
@@ -84,10 +96,7 @@ export default function GrafanaDashboard({
   const renderDefaultLayout = () => (
     <section className="space-y-6">
       {panelUrls.map(({ panel, url }) => (
-        <DashboardPanel
-          key={`panel-${panel.id}`}
-          panel={{ ...panel, url }}
-        />
+        <DashboardPanel key={`panel-${panel.id}`} panel={{ ...panel, url }} />
       ))}
     </section>
   );
@@ -101,7 +110,7 @@ export default function GrafanaDashboard({
         )}
       </nav>
 
-      {config.variables.length > 0 && showFilters &&(
+      {config.variables.length > 0 && showFilters && (
         <DashboardFilters
           variables={config.variables}
           availableFilters={availableFilters}

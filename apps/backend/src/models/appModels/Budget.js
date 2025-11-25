@@ -3,6 +3,10 @@ const shortid = require('shortid');
 
 const BudgetStatusEnum = ['draft', 'pending', 'approved', 'rejected', 'in_progress', 'done'];
 
+const generateIdentifier = () => {
+  return `PRE-${shortid.generate().slice(0, 6).toUpperCase()}`;
+};
+
 const schema = new mongoose.Schema({
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now },
@@ -14,9 +18,10 @@ const schema = new mongoose.Schema({
   name: { type: String, required: true },
   note: { type: String },
   date: { type: Date, required: true },
+  endDate: { type: Date },
   status: { type: String, enum: BudgetStatusEnum, default: 'draft' },
   amountPaid: { type: Number, default: 0 },
-  identifier: { type: String, unique: true, default: shortid.generate().toUpperCase() },
+  identifier: { type: String, unique: true, default: generateIdentifier },
 
   taxRate: { type: Number },
   subTotal: { type: Number },

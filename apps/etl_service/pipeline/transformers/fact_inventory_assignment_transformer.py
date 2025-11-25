@@ -15,7 +15,7 @@ def transform_fact_inventory_assignment(data: dict):
 
     df_tasks = df_tasks.explode('assignedResources')
 
-    df_tasks_explode = df_tasks['assignedResources'].apply(pd.Series).drop(columns=['_id'])
+    df_tasks_explode = df_tasks['assignedResources'].apply(pd.Series)
 
     if df_tasks_explode.empty:
         return pd.DataFrame()

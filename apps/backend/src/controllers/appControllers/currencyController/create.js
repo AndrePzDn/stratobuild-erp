@@ -11,14 +11,16 @@ const create = async (model, req, res) => {
     await existingCurrency.save();
   }
 
-  if (
-    (existingCurrency.quoteDate && existingCurrency.quoteDate >= new Date(req.body.quoteDate)) ||
-    existingCurrency.quoteDate > new Date()
-  ) {
-    return res.status(400).json({
-      success: false,
-      message: 'A currency with this symbol already exists with a more recent quote date.',
-    });
+  if (existingCurrency) {
+    if (
+      (existingCurrency.quoteDate && existingCurrency.quoteDate >= new Date(req.body.quoteDate)) ||
+      existingCurrency.quoteDate > new Date()
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'La divisa ya existe con una fecha de cotización más reciente o igual.',
+      });
+    }
   }
 
   const result = await new model(req.body).save();

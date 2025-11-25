@@ -22,7 +22,7 @@ async function setupApp() {
       name: 'DEMO',
       surname: 'Admin',
       enabled: true,
-      role: 'owner',
+      role: 'Admin',
     };
     const result = await new Admin(demoAdmin).save();
 

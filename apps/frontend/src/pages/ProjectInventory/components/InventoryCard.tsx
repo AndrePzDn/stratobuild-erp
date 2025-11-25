@@ -14,15 +14,15 @@ export default function InventoryCard({ item }: Props) {
       </article>
       <section className="flex flex-col items-end">
         <span className="text-sm text-gray-500">
-          Cantidad Disponible: {item.quantityAvailable}{" "}
+          Cantidad Disponible: {item.quantityAvailable.toFixed(2)}{" "}
           {item.resource.unitOfMeasurement.symbol}
         </span>
         <span className="text-sm text-gray-500">
-          Cantidad Usada: {item.quantityUsed}{" "}
+          Cantidad Usada: {item.quantityUsed.toFixed(2)}{" "}
           {item.resource.unitOfMeasurement.symbol}
         </span>
         <span className="text-sm text-gray-500">
-          Total Recurso: {item.quantity}{" "}
+          Total Recurso: {item.quantity.toFixed(2)}{" "}
           {item.resource.unitOfMeasurement.symbol}
         </span>
       </section>

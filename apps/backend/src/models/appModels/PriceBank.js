@@ -4,6 +4,7 @@ const schema = new mongoose.Schema({
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now },
   removed: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
 
   unitPrice: { type: Number, required: true },
   quoteDate: { type: Date, default: Date.now },

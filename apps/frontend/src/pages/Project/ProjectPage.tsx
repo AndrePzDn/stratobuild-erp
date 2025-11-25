@@ -28,18 +28,21 @@ export default function ProjectPage() {
 
   const [listData, isLoading, isSuccess] = useListEntity<Project>(
     "project",
-    pageNumber
+    pageNumber,
   );
 
   const projectServiceGrouped = () => {
-    return listData.reduce((acc, project) => {
-      const service = project.serviceType.name;
-      if (!acc[service]) {
-        acc[service] = [];
-      }
-      acc[service].push(project);
-      return acc;
-    }, {} as Record<string, Project[]>);
+    return listData.reduce(
+      (acc, project) => {
+        const service = project.serviceType.name;
+        if (!acc[service]) {
+          acc[service] = [];
+        }
+        acc[service].push(project);
+        return acc;
+      },
+      {} as Record<string, Project[]>,
+    );
   };
 
   const statusTranslate = (status: string) => {
@@ -120,12 +123,12 @@ export default function ProjectPage() {
                   </p>
                   <p className="text-sm text-muted-foreground">
                     Fecha de inicio:{" "}
-                    {new Date(project.startDate).toLocaleDateString()}
+                    {new Date(project.startDate).toLocaleDateString("es-ES")}
                   </p>
                   {project.endDate && (
                     <p className="text-sm text-muted-foreground">
                       Fecha de finalización:{" "}
-                      {new Date(project.endDate).toLocaleDateString()}
+                      {new Date(project.endDate).toLocaleDateString("es-ES")}
                     </p>
                   )}
                 </CardContent>
@@ -133,9 +136,7 @@ export default function ProjectPage() {
                 <CardFooter className="flex justify-end flex-wrap gap-4 mt-auto">
                   <TooltipButton
                     icon={<Images />}
-                    onClick={() =>
-                      navigate(`/project/reports/${project._id}`)
-                    }
+                    onClick={() => navigate(`/project/reports/${project._id}`)}
                   >
                     Galeria
                   </TooltipButton>

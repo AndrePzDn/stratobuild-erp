@@ -34,15 +34,15 @@ export const sidebarItems = [
       { label: "Cotizaciones", redirect: "/quote" },
     ],
   },
-  {
-    label: "Facturación",
-    icon: <DollarSign />,
-    children: [
-      { label: "Facturas", redirect: "/invoice" },
-      { label: "Impuestos", redirect: "/taxes" },
-      { label: "Monedas", redirect: "/currencies" },
-    ],
-  },
+  // {
+  //   label: "Facturación",
+  //   icon: <DollarSign />,
+  //   children: [
+  //     { label: "Facturas", redirect: "/invoice" },
+  //     { label: "Impuestos", redirect: "/taxes" },
+  //     { label: "Monedas", redirect: "/currencies" },
+  //   ],
+  // },
   {
     label: "Recursos",
     icon: <Package />,
@@ -59,10 +59,10 @@ export const sidebarItems = [
     redirect: "/admin-users",
     children: [],
   },
-  {
-    label: "Configuración",
-    icon: <Settings />,
-    redirect: "/settings",
-    children: [],
-  },
+  // {
+  //   label: "Configuración",
+  //   icon: <Settings />,
+  //   redirect: "/settings",
+  //   children: [],
+  // },
 ];

@@ -1,11 +1,21 @@
-import { GrafanaDashboard, type DashboardConfig, type PanelConfig } from "@/components/dashboard";
+import {
+  GrafanaDashboard,
+  type DashboardConfig,
+  type PanelConfig,
+} from "@/components/dashboard";
+import type { DashboardFilters as DashFilters } from "@/components/dashboard/types";
+import KPIDashboard from "@/components/dashboard/KPIDashboard";
+import ProjectGantt from "@/components/dashboard/ProjectGantt";
+import { useState } from "react";
+
+const DEFAULT_FILTERS: { Proyecto: string[] } = { Proyecto: [] };
 import { Card, CardContent } from "@/components/ui/card";
 
 const DASHBOARD_CONFIG: DashboardConfig = {
   grafanaBase: "http://localhost",
   dashboardUid: "beop9bu7wjif4f",
   dashboardPath: "new-dashboard",
-  folderUid: "", // Vacío para evitar problemas
+  folderUid: "",
   orgId: "1",
   panels: [
     { id: 4, title: "Panel 4", height: 300 },
@@ -26,7 +36,20 @@ const DASHBOARD_CONFIG: DashboardConfig = {
 };
 
 export default function HomePage() {
-  const customLayout = (panelUrls: Array<{ panel: PanelConfig; url: string }>) => (
+  const [selectedProjectName, setSelectedProjectName] = useState("");
+  const [selectedProjectsCount, setSelectedProjectsCount] = useState(0);
+  const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
+
+  const onFiltersChange = (filters: DashFilters) => {
+    const vals = filters["Proyecto"] || [];
+    setSelectedProjectsCount(vals.length);
+    setSelectedProjects(vals);
+    setSelectedProjectName(vals && vals.length === 1 ? vals[0] : "");
+  };
+
+  const customLayout = (
+    panelUrls: Array<{ panel: PanelConfig; url: string }>,
+  ) => (
     <section className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {panelUrls
@@ -64,11 +87,17 @@ export default function HomePage() {
   );
 
   return (
-    <GrafanaDashboard
-      config={DASHBOARD_CONFIG}
-      title="Dashboard de Proyectos"
-      customLayout={customLayout}
-      defaultFilters={{Proyecto: []}}
-    />
+    <>
+      <KPIDashboard selectedProjectName={selectedProjectName} selectedProjectsCount={selectedProjectsCount} selectedProjects={selectedProjects} />
+      <GrafanaDashboard
+        config={DASHBOARD_CONFIG}
+        title="Dashboard de Proyectos"
+        customLayout={customLayout}
+        defaultFilters={DEFAULT_FILTERS}
+        onFiltersChange={onFiltersChange}
+      />
+
+      <ProjectGantt projectName={selectedProjectsCount === 1 ? selectedProjectName : ""} />
+    </>
   );
 }

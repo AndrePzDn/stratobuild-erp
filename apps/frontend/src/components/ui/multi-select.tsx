@@ -135,7 +135,7 @@ export default function MultiSelect({
         >
           {items.length === 0 ? (
             <div className="px-3 py-2 text-sm text-muted-foreground">
-              No options available
+              No hay opciones disponibles
             </div>
           ) : (
             <>

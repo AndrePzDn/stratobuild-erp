@@ -73,7 +73,7 @@ export default function BudgetFieldValues() {
           placeholder=""
         />
       </section>
-      <section className="grid grid-cols-3 gap-4">
+      <section className="grid grid-cols-4 gap-4">
         <SelectFormField
           control={control}
           label="Cliente"
@@ -91,7 +91,8 @@ export default function BudgetFieldValues() {
           placeholder="Selecciona un estado"
           options={options}
         />
-        <CalendarFormField control={control} label="Fecha" name="date" />
+        <CalendarFormField control={control} label="Fecha Inicio" name="date" />
+        <CalendarFormField control={control} label="Fecha Fin" name="endDate" />
       </section>
       <section className="grid grid-cols-2 gap-4">
         <SelectFormField

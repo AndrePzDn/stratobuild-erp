@@ -12,8 +12,8 @@ def transform_dim_task(data: dict):
     df_tasks.rename(columns={
         '_id': 'task_id',
         'project': 'project_id',
-        'startDate': 'start_date',
-        'endDate': 'end_date',
+        'estimatedStartDate': 'start_date',
+        'estimatedEndDate': 'end_date',
     }, inplace=True)
 
     df_final = df_tasks[[

@@ -38,9 +38,13 @@ export default function PlanningPage() {
   const { id } = useParams();
 
   // const { data: fetchedData, refetch } = useFetchData<Task>("task");
-  const [fetchedData, isLoading, isSuccess, refetch  ] = useListEntity<Task>("task", 1, {
-    project: id || "",
-  })
+  const [fetchedData, isLoading, isSuccess, refetch] = useListEntity<Task>(
+    "task",
+    1,
+    {
+      project: id || "",
+    },
+  );
   const { data: project } = useFetchData<Project>("project", id);
 
   const [zoom, setZoom] = useState<number>(100);
@@ -106,7 +110,7 @@ export default function PlanningPage() {
 
     try {
       console.log(data);
-      
+
       const res = await patchEntity("task", taskToEdit._id, data, token);
 
       if (res?.data.success) {
@@ -122,7 +126,7 @@ export default function PlanningPage() {
   const handleEditOnMove = async (
     taskId: string,
     from: Date,
-    to: Date | null
+    to: Date | null,
   ) => {
     if (!to || !user) return;
 
@@ -133,13 +137,15 @@ export default function PlanningPage() {
         "task",
         taskId,
         { estimatedStartDate: from, estimatedEndDate: to },
-        token
+        token,
       );
 
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task._id === taskId ? { ...task, estimatedStartDate: from, estimatedEndDate: to } : task
-        )
+          task._id === taskId
+            ? { ...task, estimatedStartDate: from, estimatedEndDate: to }
+            : task,
+        ),
       );
     } catch (error) {
       console.error("Error moving task:", error);
@@ -163,10 +169,10 @@ export default function PlanningPage() {
     Object.entries(groupedTaks)
       .sort(([, tasksA], [, tasksB]) => {
         const earliestDateA = Math.min(
-          ...tasksA.map((task) => new Date(task.estimatedStartDate).getTime())
+          ...tasksA.map((task) => new Date(task.estimatedStartDate).getTime()),
         );
         const earliestDateB = Math.min(
-          ...tasksB.map((task) => new Date(task.estimatedStartDate).getTime())
+          ...tasksB.map((task) => new Date(task.estimatedStartDate).getTime()),
         );
         return earliestDateA - earliestDateB;
       })
@@ -174,9 +180,10 @@ export default function PlanningPage() {
         category,
         tasks.sort(
           (a, b) =>
-            new Date(a.estimatedStartDate).getTime() - new Date(b.estimatedStartDate).getTime()
+            new Date(a.estimatedStartDate).getTime() -
+            new Date(b.estimatedStartDate).getTime(),
         ),
-      ])
+      ]),
   );
 
   useEffect(() => {
@@ -199,7 +206,7 @@ export default function PlanningPage() {
           <Button
             variant="secondary"
             size="icon"
-            disabled={zoom + 20 > 300 ? true : false}
+            disabled={zoom + 20 > 500 ? true : false}
             onClick={() => setZoom(zoom + 20)}
           >
             <Plus />
@@ -289,7 +296,11 @@ export default function PlanningPage() {
         trigger={false}
         initialData={
           taskToEdit
-            ? normalizeItemToEdit(taskToEdit, ["project", "reports", "assignedResources.resource"])
+            ? normalizeItemToEdit(taskToEdit, [
+                "project",
+                "reports",
+                "assignedResources.resource",
+              ])
             : undefined
         }
       >
