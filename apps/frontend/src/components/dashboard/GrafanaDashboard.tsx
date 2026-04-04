@@ -9,7 +9,6 @@ import type {
   DashboardFilters as Filters,
   PanelConfig,
 } from "./types";
-import KPIDashboard from "./KPIDashboard";
 
 interface PanelWithUrl {
   panel: PanelConfig;
