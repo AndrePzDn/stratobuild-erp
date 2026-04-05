@@ -20,7 +20,7 @@ export default function QuotePage() {
   const normalizeFields = ["client", "created_by"];
 
   return (
-    <TableTemplate
+    <TableTemplate importable
       config={config}
       entity="quote"
       canBeCreated

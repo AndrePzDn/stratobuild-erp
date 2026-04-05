@@ -196,7 +196,38 @@ export const sendMail = async (entity: string, id: string, token: string) => {
     {
       pending: "Enviando correo...",
       success: "Correo enviado exitosamente",
-      error: "Error al enviar el correo",
     }
   );
+};
+
+export const importEntity = async (entity: string, file: File, token: string) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await handleConnectionPetition(() =>
+    axios.post(`${BASE_URL}/${entity}/import`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  ).catch((error) => {
+    if (error instanceof ErrorResponse) {
+      toast.error(error.apiMessage);
+    } else {
+      console.error("Unexpected error:", error);
+    }
+  });
+
+  if (!res) {
+    return;
+  }
+  
+  const result = res.data.result;
+  if (result.errors && result.errors.length > 0) {
+    toast.warning(`Importó ${result.importedCount} registros. Fallaron ${result.errors.length} filas.`);
+  } else {
+    toast.success("Importación exitosa");
+  }
+  return res;
 };

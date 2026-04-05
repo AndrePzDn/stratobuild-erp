@@ -24,6 +24,7 @@ import {
   Plus,
   Search,
   Trash,
+  UploadCloud,
 } from "lucide-react";
 
 import {
@@ -33,6 +34,7 @@ import {
   patchEntity,
   postEntity,
   sendMail as sendMailEntity,
+  importEntity,
 } from "@/utils/connections";
 
 import { normalizeItemToEdit } from "@/utils/normalizeFields";
@@ -41,6 +43,7 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import type { Entity } from "@/types";
 import ConfirmationDialog from "../ui/confirmation-dialog";
+import { useRef } from "react";
 
 interface TableHeadProps {
   label: string;
@@ -61,6 +64,7 @@ interface Props<T extends z.ZodTypeAny> {
   convertible?: boolean;
   deletable?: boolean;
   sendMail?: boolean;
+  importable?: boolean;
   form?: ReactNode;
   schema?: T;
   dialogSize?: "default" | "sm" | "lg" | "xl";
@@ -175,7 +179,7 @@ function TableRowActions({
         )}
       </DropdownMenuContent>
       <ConfirmationDialog
-        title={`Estas seguro de eliminar ${item.name || item._id}?`}
+        title={`Estas seguro de eliminar ${(item as any).name || item._id}?`}
         isOpen={isDeleting}
         handleOpen={() => setIsDeleting(!isDeleting)}
         handleOnConfirm={() => {
@@ -203,6 +207,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   searchable = false,
   searchField = "name",
   searchPlaceholder = "Buscar...",
+  importable = false,
 }: Props<T>) {
   const haveOptions = editable || convertible || deletable;
   const { user } = useAuthStore();
@@ -212,6 +217,8 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   const [itemToEdit, setItemToEdit] = useState<Entity | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Debounce search term
   useEffect(() => {
@@ -299,6 +306,22 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     console.log(`Sending email for item: ${item._id}`);
   };
 
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    
+    setIsImporting(true);
+    try {
+        await importEntity(entity, file, user.token);
+        fetchData();
+    } catch (error) {
+        console.error(error);
+    } finally {
+        setIsImporting(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -307,7 +330,22 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
     <div className="flex flex-col gap-4 bg-table-background rounded-md text-table-foreground">
       <nav className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{`Lista de ${config.labelName}`}</h1>
-        {canBeCreated && schema && (
+        <div className="flex gap-2 items-center">
+          {importable && (
+            <>
+              <input type="file" ref={fileInputRef} className="hidden" accept=".xlsx, .xls" onChange={handleImport} />
+              <Button
+                variant="outline"
+                disabled={isImporting}
+                className="gap-2"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <UploadCloud size={16} />
+                {isImporting ? 'Importando...' : 'Importar'}
+              </Button>
+            </>
+          )}
+          {canBeCreated && schema && (
           <FormDialog
             schema={schema}
             buttonLabel={`Agregar ${config.labelName}`}
@@ -321,6 +359,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
             {form}
           </FormDialog>
         )}
+        </div>
       </nav>
 
       {searchable && (
@@ -362,7 +401,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                       switch (header.type) {
                         case "date":
                           return value
-                            ? new Date(value).toLocaleDateString()
+                            ? new Date(value as string | number | Date).toLocaleDateString()
                             : "";
                         case "boolean":
                           return (
@@ -386,7 +425,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                                     style: "currency",
                                     currency: "EUR",
                                   })
-                                : value}
+                                : (value as ReactNode)}
                             </span>
                           );
                         case "number":
@@ -413,11 +452,11 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                                   : "text-gray-600"
                               }`}
                             >
-                              {translateStatus(value)}
+                              {translateStatus(value as string)}
                             </span>
                           );
                         default:
-                          return <span className="text-sm">{value}</span>;
+                          return <span className="text-sm">{value as ReactNode}</span>;
                       }
                     })()}
                   </TableCell>

@@ -13,7 +13,7 @@ export default function ProviderPage() {
   };
 
   return (
-    <TableTemplate
+    <TableTemplate importable
       config={config}
       entity="provider"
       canBeCreated

@@ -16,7 +16,7 @@ export default function ResourcePage() {
   const normalizeFields = ["unitOfMeasurement"];
 
   return (
-    <TableTemplate
+    <TableTemplate importable
       entity="resource"
       config={config}
       canBeCreated

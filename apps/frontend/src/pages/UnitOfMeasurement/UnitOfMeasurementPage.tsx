@@ -13,7 +13,7 @@ export default function UnitOfMeasurementPage() {
   };
 
   return (
-    <TableTemplate
+    <TableTemplate importable
       entity="unitOfMeasurement"
       config={config}
       schema={UnitOfMeasurementSchema}

@@ -15,7 +15,7 @@ export default function ClientPage() {
   };
 
   return (
-    <TableTemplate
+    <TableTemplate importable
       entity="client"
       config={config}
       schema={ClientSchema}

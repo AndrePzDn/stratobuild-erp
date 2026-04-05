@@ -16,7 +16,7 @@ export default function BankPricePage() {
   };
 
   return (
-    <TableTemplate
+    <TableTemplate importable
       config={config}
       entity="priceBank"
       canBeCreated
