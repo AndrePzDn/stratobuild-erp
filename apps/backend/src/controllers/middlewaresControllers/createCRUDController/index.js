@@ -11,6 +11,7 @@ const filter = require('./filter');
 const summary = require('./summary');
 const listAll = require('./listAll');
 const paginatedList = require('./paginatedList');
+const importData = require('./importData');
 
 const createCRUDController = (modelName) => {
   if (!modelsFiles.includes(modelName)) {
@@ -28,6 +29,7 @@ const createCRUDController = (modelName) => {
     search: (req, res) => search(Model, req, res),
     filter: (req, res) => filter(Model, req, res),
     summary: (req, res) => summary(Model, req, res),
+    import: (req, res) => importData(Model, req, res),
   };
   return crudMethods;
 };

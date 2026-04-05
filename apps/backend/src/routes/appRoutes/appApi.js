@@ -25,6 +25,11 @@ const routerApp = (entity, controller) => {
     mapRoute('/mail/:id', 'post', 'mail');
   }
 
+  const importableEntities = ['pricebank', 'quote', 'client', 'resource', 'unitofmeasurement', 'provider'];
+  if (importableEntities.includes(entity)) {
+    mapRoute('/import', 'post', 'import');
+  }
+
   if (entity === 'quote' || entity === 'budget') {
     mapRoute('/convert/:id', 'post', 'convert');
   }

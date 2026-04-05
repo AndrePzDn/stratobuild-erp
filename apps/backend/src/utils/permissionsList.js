@@ -45,6 +45,7 @@ const permissions = {
       'listAll',
       'filter',
       'summary',
+      'import',
     ],
     constructionreport: [
       'create',
@@ -113,6 +114,7 @@ const permissions = {
       'listAll',
       'filter',
       'summary',
+      'import',
     ],
     provider: [
       'create',
@@ -170,6 +172,7 @@ const permissions = {
       'summary',
       'mail',
       'convert',
+      'import',
     ],
     resource: [
       'create',
@@ -181,6 +184,7 @@ const permissions = {
       'listAll',
       'filter',
       'summary',
+      'import',
     ],
     servicetype: [
       'create',
@@ -205,6 +209,7 @@ const permissions = {
       'listAll',
       'filter',
       'summary',
+      'import',
     ],
   },
   ProjectManager: {
