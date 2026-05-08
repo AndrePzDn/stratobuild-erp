@@ -41,6 +41,7 @@ import { normalizeItemToEdit } from "@/utils/normalizeFields";
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useAuthStore } from "@/stores/authStore";
+import { hasPermission } from "@/utils/permissionsList";
 import type { Entity } from "@/types";
 import ConfirmationDialog from "../ui/confirmation-dialog";
 import { useRef } from "react";
@@ -209,8 +210,18 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
   searchPlaceholder = "Buscar...",
   importable = false,
 }: Props<T>) {
-  const haveOptions = editable || convertible || deletable;
   const { user } = useAuthStore();
+
+  const userRole = user?.role;
+  const canCreate = canBeCreated && hasPermission(userRole, entity, 'create');
+  const canEdit = editable && hasPermission(userRole, entity, 'update');
+  const canDelete = deletable && hasPermission(userRole, entity, 'delete');
+  const canConvert = convertible && hasPermission(userRole, entity, 'convert');
+  const canSendMail = sendMail && hasPermission(userRole, entity, 'mail');
+  const canImport = importable && hasPermission(userRole, entity, 'import');
+
+  const haveOptions = canEdit || canConvert || canDelete || canSendMail;
+
   const [items, setItems] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -331,7 +342,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
       <nav className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{`Lista de ${config.labelName}`}</h1>
         <div className="flex gap-2 items-center">
-          {importable && (
+          {canImport && (
             <>
               <input type="file" ref={fileInputRef} className="hidden" accept=".xlsx, .xls" onChange={handleImport} />
               <Button
@@ -345,7 +356,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
               </Button>
             </>
           )}
-          {canBeCreated && schema && (
+          {canCreate && schema && (
           <FormDialog
             schema={schema}
             buttonLabel={`Agregar ${config.labelName}`}
@@ -465,14 +476,14 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
                   <TableCell className="flex justify-end gap-2 w-fit">
                     <TableRowActions
                       item={item}
-                      onDelete={deletable ? handleDelete : undefined}
-                      onEdit={editable ? handleEdit : undefined}
-                      onConvert={convertible ? handleConvert : undefined}
-                      onSendMail={sendMail ? handleSendMail : undefined}
-                      deletable={deletable}
-                      editable={editable}
-                      convertible={convertible}
-                      sendMail={sendMail}
+                      onDelete={canDelete ? handleDelete : undefined}
+                      onEdit={canEdit ? handleEdit : undefined}
+                      onConvert={canConvert ? handleConvert : undefined}
+                      onSendMail={canSendMail ? handleSendMail : undefined}
+                      deletable={canDelete}
+                      editable={canEdit}
+                      convertible={canConvert}
+                      sendMail={canSendMail}
                     />
                   </TableCell>
                 )}
@@ -481,7 +492,7 @@ export default function TableTemplate<T extends z.ZodTypeAny>({
           </TableBody>
         </Table>
       </div>
-      {editable && schema && (
+      {canEdit && schema && (
         <FormDialog
           schema={schema}
           title={`Editar ${config.labelName}`}

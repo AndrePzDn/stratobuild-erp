@@ -4,7 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { sidebarItems } from "@/constants/sidebarItems";
+import { sidebarItems, type SidebarItem } from "@/constants/sidebarItems";
+import { hasPermission } from "@/utils/permissionsList";
 import { Link, useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import clsx from "clsx";
@@ -30,6 +31,30 @@ export default function Sidebar() {
   const { user, logout } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const filteredSidebarItems = React.useMemo(() => {
+    const userRole = user?.role;
+    return sidebarItems.map(item => {
+      const newItem = { ...item };
+      if (newItem.children && newItem.children.length > 0) {
+        newItem.children = newItem.children.filter(child => {
+          if (!child.entity) return true;
+          return hasPermission(userRole, child.entity, 'read') || hasPermission(userRole, child.entity, 'list');
+        });
+      }
+      return newItem;
+    }).filter(item => {
+      if (item.children && item.children.length > 0) return true;
+      if (item.entity) {
+        return hasPermission(userRole, item.entity, 'read') || hasPermission(userRole, item.entity, 'list');
+      }
+      const originalItem = sidebarItems.find(i => i.label === item.label);
+      if (originalItem?.children && originalItem.children.length > 0 && (!item.children || item.children.length === 0)) {
+        return false;
+      }
+      return true;
+    });
+  }, [user?.role]);
+
   const SidebarContent = () => (
     <>
       <figure>
@@ -38,7 +63,7 @@ export default function Sidebar() {
         </Link>
       </figure>
       <Accordion type="multiple" className="space-y-1 font-semibold">
-        {sidebarItems.map((item, index) => {
+        {filteredSidebarItems.map((item, index) => {
           if (!item.children || item.children.length === 0) {
             return (
               <React.Fragment key={item.label || index}>
@@ -122,12 +147,6 @@ export default function Sidebar() {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <UserIcon />
-                Cuenta
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
             <DropdownMenuItem onClick={logout}>
               <LogOutIcon />
               Cerrar sesión
@@ -158,7 +177,7 @@ export default function Sidebar() {
             </Link>
           </figure>
           <Accordion type="multiple" className="space-y-1 font-semibold">
-            {sidebarItems.map((item, index) => {
+            {filteredSidebarItems.map((item, index) => {
               if (!item.children || item.children.length === 0) {
                 return (
                   <React.Fragment key={item.label || index}>
@@ -243,12 +262,6 @@ export default function Sidebar() {
               align="end"
               sideOffset={4}
             >
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <UserIcon />
-                  Cuenta
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
               <DropdownMenuItem onClick={logout}>
                 <LogOutIcon />
                 Cerrar sesión

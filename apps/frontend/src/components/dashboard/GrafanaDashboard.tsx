@@ -23,7 +23,10 @@ interface GrafanaDashboardProps {
   className?: string;
   showFilters?: boolean;
   defaultFilters?: Filters;
+  externalFilters?: Filters;
   onFiltersChange?: (filters: Filters) => void;
+  dateRange?: DateRange;
+  onDateRangeChange?: (range: DateRange) => void;
 }
 
 export default function GrafanaDashboard({
@@ -34,17 +37,27 @@ export default function GrafanaDashboard({
   customLayout,
   className = "",
   defaultFilters = {},
+  externalFilters,
   onFiltersChange,
+  dateRange: externalDateRange,
+  onDateRangeChange,
 }: GrafanaDashboardProps) {
   const [availableFilters, setAvailableFilters] = useState<
     Record<string, string[]>
   >({});
   const [selectedFilters, setSelectedFilters] = useState<Filters>({});
   const [loading, setLoading] = useState(true);
-  const [dateRange, setDateRange] = useState<DateRange>({
+  const [internalDateRange, setInternalDateRange] = useState<DateRange>({
     from: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
     to: new Date(),
   });
+
+  const currentDateRange = externalDateRange ?? internalDateRange;
+
+  const handleDateRangeChange = (range: DateRange) => {
+    if (onDateRangeChange) onDateRangeChange(range);
+    setInternalDateRange(range);
+  };
 
   const handleFilterChange = (key: string, values: string[]) => {
     setSelectedFilters((prev) => {
@@ -83,14 +96,15 @@ export default function GrafanaDashboard({
   }, [config, defaultFilters]);
 
   const panelUrls = useMemo(() => {
-    const from = dateRange.from.getTime();
-    const to = dateRange.to.getTime();
+    const from = currentDateRange.from.getTime();
+    const to = currentDateRange.to.getTime();
+    const activeFilters = externalFilters ?? selectedFilters;
 
     return config.panels.map((panel) => ({
       panel,
-      url: buildGrafanaUrl(config, panel.id, selectedFilters, from, to),
+      url: buildGrafanaUrl(config, panel.id, activeFilters, from, to),
     }));
-  }, [selectedFilters, dateRange, config]);
+  }, [selectedFilters, externalFilters, currentDateRange, config]);
 
   const renderDefaultLayout = () => (
     <section className="space-y-6">
@@ -105,7 +119,7 @@ export default function GrafanaDashboard({
       <nav className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{title}</h1>
         {showDatePicker && (
-          <DateRangePicker date={dateRange} setDate={setDateRange} />
+          <DateRangePicker date={currentDateRange} setDate={handleDateRangeChange} />
         )}
       </nav>
 

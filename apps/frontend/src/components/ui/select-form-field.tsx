@@ -49,7 +49,7 @@ export const SelectFormField = <T extends FieldValues>({
             disabled={disabled}
           >
             <FormControl>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full overflow-hidden">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>

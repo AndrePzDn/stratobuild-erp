@@ -1041,6 +1041,7 @@ export type GanttProviderProps = {
   onAddItem?: (date: Date) => void;
   children: ReactNode;
   className?: string;
+  startDate?: Date;
 };
 
 export const GanttProvider: FC<GanttProviderProps> = ({
@@ -1049,10 +1050,11 @@ export const GanttProvider: FC<GanttProviderProps> = ({
   onAddItem,
   children,
   className,
+  startDate = new Date(),
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [timelineData, setTimelineData] = useState<TimelineData>(
-    createInitialTimelineData(new Date()),
+    createInitialTimelineData(startDate),
   );
   const [, setScrollX] = useGanttScrollX();
   const sidebarElement = scrollRef.current?.querySelector(
@@ -1081,11 +1083,17 @@ export const GanttProvider: FC<GanttProviderProps> = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render when props change
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft =
-        scrollRef.current.scrollWidth / 2 - scrollRef.current.clientWidth / 2;
+      const timelineStartDate = new Date(startDate.getFullYear() - 1, 0, 1);
+      const offset = getOffset(startDate, timelineStartDate, {
+        range,
+        columnWidth,
+        zoom,
+      } as GanttContextProps);
+
+      scrollRef.current.scrollLeft = Math.max(0, offset - 50);
       setScrollX(scrollRef.current.scrollLeft);
     }
-  }, [range, zoom, setScrollX]);
+  }, [range, zoom, setScrollX, startDate]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: "Throttled"
   const handleScroll = useCallback(
@@ -1184,7 +1192,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
     >
       <div
         className={cn(
-          "gantt relative grid h-full w-full flex-none select-none overflow-auto rounded-sm bg-secondary",
+          "gantt relative grid h-full w-full flex-none select-none overflow-auto rounded-sm bg-muted",
           range,
           className,
         )}

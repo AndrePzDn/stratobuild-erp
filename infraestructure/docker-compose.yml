@@ -37,6 +37,7 @@ services:
     image: mongo:latest
     ports:
       - "27017:27017"
+    restart: always
     volumes:
       - mongodb_data-demo:/data/db
     networks:
@@ -70,7 +71,6 @@ services:
     environment:
       - GF_SECURITY_ALLOW_EMBEDDING=true
       - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
       - GF_AUTH_PROXY_ENABLED=false
     depends_on:
       - clickhouse

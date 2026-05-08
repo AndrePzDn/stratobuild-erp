@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/authStore";
 import type { ConstructionReport, Task } from "@/types";
 import { deleteEntity } from "@/utils/connections";
+import { formatDate } from "date-fns";
 import { LoaderCircleIcon, Trash2 } from "lucide-react";
 import { useState } from "react";
 
@@ -123,11 +124,17 @@ export default function ReportList({
         trigger={false}
         size="xl"
       >
-        <img
-          src={selectedImage?.imageUrl}
-          alt={selectedImage?.name}
-          className="object-cover w-full h-full cursor-pointer"
-        />
+        {selectedImage && (
+          <div className="flex flex-col gap-4">
+            <h2 className="text-xl font-semibold">{selectedImage.name}</h2>
+            <span>{formatDate(selectedImage.date, "dd/MM/yyyy")}</span>
+            <img
+              src={selectedImage.imageUrl}
+              alt={selectedImage.name}
+              className="object-cover w-full h-full cursor-pointer"
+            />
+          </div>
+        )}
       </DialogTemplate>
     </ul>
   );

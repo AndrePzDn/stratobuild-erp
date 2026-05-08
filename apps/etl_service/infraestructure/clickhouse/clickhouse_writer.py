@@ -56,6 +56,9 @@ class ClickHouseWriter:
             print(f"No data to insert into {table}.")
             return
         
+        for col in df.select_dtypes(include=['object', 'string']).columns:
+            df[col] = df[col].fillna("")
+        
         try:
             self.client.insert_df(table, df)
             print(f"Successfully inserted {len(df)} rows into {table}.")

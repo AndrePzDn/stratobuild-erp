@@ -185,3 +185,223 @@ def get_resource_efficiency(client = Depends(get_db_client)):
         yaxis_title='Cantidad'
     )
     return fig_to_json_safe(fig)
+
+@router.get("/api/dashboard/task-progress-donut")
+def get_task_progress_donut(client = Depends(get_db_client)):
+    sql = """
+    SELECT status, count() as count
+    FROM fact_project_task
+    GROUP BY status
+    """
+    df = get_data_from_clickhouse(client, sql)
+    if df.empty:
+        return fig_to_json_safe(px.pie(title="Sin tareas"))
+    fig = px.pie(
+        df, 
+        names='status', 
+        values='count', 
+        hole=0.4, 
+        title="Project Health Status (Donut)",
+        color_discrete_sequence=['#10b981', '#f59e0b', '#ef4444', '#cbd5e1']
+    )
+    fig.update_layout(margin=dict(t=40, b=10, l=10, r=10))
+    return fig_to_json_safe(fig)
+
+@router.get("/api/dashboard/portfolio-treemap")
+def get_portfolio_treemap(client = Depends(get_db_client)):
+    sql = """
+    SELECT 
+        status,
+        project_name,
+        1 as placeholder_val
+    FROM dim_project
+    WHERE status != 'completed'
+    """
+    df = get_data_from_clickhouse(client, sql)
+    if df.empty:
+         return fig_to_json_safe(px.treemap(title="Sin proyectos"))
+    fig = px.treemap(
+        df,
+        path=[px.Constant("Portafolio"), 'status', 'project_name'],
+        values='placeholder_val',
+        title="Top Active Projects Structure"
+    )
+    fig.update_layout(margin=dict(t=40, b=10, l=10, r=10))
+    return fig_to_json_safe(fig)
+
+@router.get("/api/dashboard/quotes-states")
+def get_quotes_states(client = Depends(get_db_client)):
+    sql = """
+    SELECT status, count() as count
+    FROM fact_quote
+    GROUP BY status
+    """
+    df = get_data_from_clickhouse(client, sql)
+    if df.empty:
+        return fig_to_json_safe(px.pie(title="Sin cotizaciones"))
+    fig = px.pie(
+        df, 
+        names='status', 
+        values='count', 
+        hole=0.4, 
+        title="Estados de Cotizaciones (Donut)"
+    )
+    fig.update_layout(margin=dict(t=40, b=10, l=10, r=10))
+    return fig_to_json_safe(fig)
+
+@router.get("/api/dashboard/rentability-timeline")
+def get_rentability_timeline(granularity: str = "month", client = Depends(get_db_client)):
+    time_func = {
+        "month": "toStartOfMonth",
+        "quarter": "toStartOfQuarter",
+        "year": "toYear"
+    }.get(granularity, "toStartOfMonth")
+
+    sql = f"""
+    SELECT 
+        {time_func}(date) as time_period,
+        sumIf(amount, payment_type = 'income') as income,
+        sumIf(amount, payment_type = 'expense') as expense,
+        (sumIf(amount, payment_type = 'income') - sumIf(amount, payment_type = 'expense')) as rentability
+    FROM fact_payment
+    GROUP BY time_period
+    ORDER BY time_period
+    """
+    df = get_data_from_clickhouse(client, sql)
+    if df.empty:
+        return fig_to_json_safe(px.bar(title="Sin datos financieros"))
+    fig = px.bar(
+        df, 
+        x='time_period', 
+        y='rentability', 
+        title=f"Rentabilidad ({granularity})"
+    )
+    fig.update_layout(margin=dict(t=40, b=10, l=10, r=10))
+    return fig_to_json_safe(fig)
+
+@router.get("/api/dashboard/utility-per-project")
+def get_utility_per_project(client = Depends(get_db_client)):
+    sql = """
+    SELECT 
+        P.project_name as project,
+        sumIf(PM.amount, PM.payment_type = 'income') as income,
+        sumIf(PM.amount, PM.payment_type = 'expense') as expense,
+        (sumIf(PM.amount, PM.payment_type = 'income') - sumIf(PM.amount, PM.payment_type = 'expense')) as utility
+    FROM fact_payment PM
+    JOIN dim_project P ON PM.project_id = P.project_id
+    GROUP BY project
+    ORDER BY utility DESC
+    """
+    df = get_data_from_clickhouse(client, sql)
+    if df.empty:
+        return fig_to_json_safe(px.bar(title="Sin datos por proyecto"))
+    fig = px.bar(
+        df, 
+        x='project', 
+        y='utility', 
+        title="Utilidad por Proyecto",
+        color='utility',
+        color_continuous_scale='RdYlGn'
+    )
+    fig.update_layout(margin=dict(t=40, b=40, l=10, r=10), xaxis_tickangle=-45)
+    return fig_to_json_safe(fig)
+
+@router.get("/api/dashboard/incomes-timeline")
+def get_incomes_timeline(granularity: str = "month", client = Depends(get_db_client)):
+    time_func = {
+        "month": "toStartOfMonth",
+        "quarter": "toStartOfQuarter",
+        "year": "toYear"
+    }.get(granularity, "toStartOfMonth")
+
+    sql = f"""
+    SELECT 
+        {time_func}(date) as time_period,
+        sum(amount) as income
+    FROM fact_payment
+    WHERE payment_type = 'income'
+    GROUP BY time_period
+    ORDER BY time_period
+    """
+    df = get_data_from_clickhouse(client, sql)
+    if df.empty:
+        return fig_to_json_safe(px.line(title="Sin ingresos"))
+    fig = px.line(
+        df, 
+        x='time_period', 
+        y='income', 
+        markers=True, 
+        title=f"Línea de Tiempo Operativa - Ingresos ({granularity})"
+    )
+    fig.update_layout(margin=dict(t=40, b=10, l=10, r=10))
+    return fig_to_json_safe(fig)
+
+@router.get("/api/dashboard/filters/options")
+def get_filter_options(db_client = Depends(get_db_client)):
+    sql = "SELECT groupArrayDistinct(project_name) as proyectos FROM dim_project"
+    df = get_data_from_clickhouse(db_client, sql)
+    if df.empty:
+         return {"proyectos": []}
+    return {
+        "proyectos": sorted([p for p in df.iloc[0]['proyectos'] if p and p != 'None'])
+    }
+
+@router.get("/api/dashboard/master-kpis")
+def get_master_kpis(
+    proyectos: str = None, 
+    date_from: str = None,
+    date_to: str = None,
+    db_client = Depends(get_db_client)
+):
+    where_clauses = ["1=1"]
+    params = {}
+    
+    if proyectos:
+        proyecto_list = proyectos.split(",")
+        where_clauses.append("P.project_name IN %(proyectos)s")
+        params['proyectos'] = tuple(proyecto_list)
+        
+    if date_from and date_to:
+        params['date_from'] = date_from.split('T')[0]
+        params['date_to'] = date_to.split('T')[0]
+        
+    where_sql = " AND ".join(where_clauses)
+    
+    budgets_sql = f"SELECT sum(B.total) as total FROM fact_budget B LEFT JOIN fact_quote Q ON B.quote_id = Q.quote_id LEFT JOIN dim_project P ON Q.client_id = P.client_id WHERE {where_sql}"
+    
+    payment_where = where_sql
+    if date_from and date_to:
+        payment_where += " AND FP.date >= %(date_from)s AND FP.date <= %(date_to)s"
+        
+    payments_sql = f"SELECT sum(FP.amount) as total FROM fact_payment FP JOIN dim_project P ON FP.project_id = P.project_id WHERE {payment_where} AND FP.payment_type = 'expense'"
+    
+    cash_where = where_sql
+    if date_to:
+        cash_where += " AND CF.updated <= %(date_to)s"
+    cash_sql = f"SELECT sum(CF.available_budget) as total FROM (SELECT project_id, argMax(available_budget, updated) as available_budget FROM fact_cash_flow WHERE updated <= %(date_to)s GROUP BY project_id) CF JOIN dim_project P ON CF.project_id = P.project_id WHERE {where_sql}" if date_to else f"SELECT sum(CF.available_budget) as total FROM (SELECT project_id, argMax(available_budget, updated) as available_budget FROM fact_cash_flow GROUP BY project_id) CF JOIN dim_project P ON CF.project_id = P.project_id WHERE {where_sql}"
+    
+    projects_sql = f"SELECT count() as total FROM dim_project P WHERE P.status = 'active' AND {where_sql}"
+
+    try:
+        presupuesto = float(get_data_from_clickhouse(db_client, budgets_sql, params).iloc[0]['total'] or 0)
+    except: presupuesto = 0
+    
+    try:
+        pagos = float(get_data_from_clickhouse(db_client, payments_sql, params).iloc[0]['total'] or 0)
+    except: pagos = 0
+
+    try:
+        saldo = float(get_data_from_clickhouse(db_client, cash_sql, params).iloc[0]['total'] or 0)
+    except: saldo = 0
+
+    try:
+        proyectos_count = int(get_data_from_clickhouse(db_client, projects_sql, params).iloc[0]['total'] or 0)
+    except: proyectos_count = 0
+
+    return {
+        "presupuesto_total": presupuesto,
+        "pagos_realizados": pagos,
+        "saldo_disponible": saldo,
+        "proyectos_activos": proyectos_count
+    }
+

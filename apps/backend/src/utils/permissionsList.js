@@ -1,5 +1,16 @@
 const permissions = {
   Admin: {
+    admin: [
+      'create',
+      'read',
+      'update',
+      'delete',
+      'search',
+      'list',
+      'listAll',
+      'filter',
+      'summary'
+    ],
     budget: [
       'create',
       'read',
@@ -126,6 +137,7 @@ const permissions = {
       'listAll',
       'filter',
       'summary',
+      'import',
     ],
     projectinventory: [
       'create',

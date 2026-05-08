@@ -78,7 +78,7 @@ export default function TaskFormValues() {
       <h3 className="text-md font-semibold mb-4">Recursos Asignados</h3>
       {fields.map((field, index) => (
         <div key={field.id} className="flex items-start gap-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 w-full">
             <SelectFormField
               name={`assignedResources.${index}.resource`}
               control={control}

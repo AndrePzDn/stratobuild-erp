@@ -20,6 +20,9 @@ def transform_fact_inventory_assignment(data: dict):
     if df_tasks_explode.empty:
         return pd.DataFrame()
 
+    if '_id' in df_tasks_explode.columns:
+        df_tasks_explode = df_tasks_explode.drop(columns=['_id'])
+
     df_tasks = df_tasks.drop(columns=['assignedResources']).join(df_tasks_explode).rename(columns={'resource': 'resource_id'})
 
     df_tasks.rename(

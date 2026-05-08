@@ -4,3 +4,5 @@
 .env.dw
 .qodo
 apps/frontend/.pnpm-store/
+infraestructure/clickhouse-data-demo
+infraestructure/mongodb_data-demo

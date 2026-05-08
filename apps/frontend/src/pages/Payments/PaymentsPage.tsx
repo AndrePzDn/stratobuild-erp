@@ -11,6 +11,7 @@ import { Plus } from "lucide-react";
 import ExpenseForm from "./components/ExpenseForm";
 import ResourceExpenseForm from "./components/ResourceExpenseForm";
 import { GrafanaDashboard, type DashboardConfig } from "@/components/dashboard";
+import type { DateRange } from "@/components/dashboard/types";
 
 export default function PaymentsPage() {
   const { id } = useParams();
@@ -45,26 +46,43 @@ export default function PaymentsPage() {
     if (cashFlow) setCashFlowId(cashFlow._id);
   }, [cashFlows, id]);
 
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+
+  useEffect(() => {
+    if (project) {
+      let from = new Date(project.startDate);
+      let to = project.endDate ? new Date(project.endDate) : new Date();
+      if (paymentsForProject.length > 0) {
+        const dates = paymentsForProject.map(p => new Date(p.date).getTime()).filter(t => !isNaN(t));
+        if (dates.length > 0) {
+          const minDate = new Date(Math.min(...dates));
+          const maxDate = new Date(Math.max(...dates));
+          if (minDate < from) from = minDate;
+          if (maxDate > to) to = maxDate;
+        }
+      }
+      // Only set if not already set or we want to force reset on project change
+      setDateRange(prev => prev ? prev : { from, to });
+    }
+  }, [project, paymentsForProject]);
+
   const [open, setOpen] = useState(false);
 
   const dashboardConfig: DashboardConfig = {
-    grafanaBase: "http://localhost",
-    dashboardUid: "beop9bu7wjif4f",
-    dashboardPath: "new-dashboard",
+    grafanaBase: "http://localhost:5000",
+    dashboardUid: "master-bi-dashboard",
+    dashboardPath: "master-f-layout-analytics",
     folderUid: "",
     orgId: "1",
     panels: [
-      { id: 10, title: "Análisis de Pagos", height: 400 },
+      { id: 7, title: "Timeline de Ingresos, Gastos y Saldo", height: 450 },
     ],
-    variables: [
-      {
-        key: "Proyecto",
-        displayName: "Proyecto",
-        query: "SELECT DISTINCT project_name FROM dim_project ORDER BY project_name",
-        datasourceId: 1,
-      },
-    ],
+    variables: [],
   };
+
+  const externalFilters = useMemo(() => ({
+    Proyecto: project?.name ? [project.name] : [],
+  }), [project?.name]);
 
   const forms: SelectableForm[] = [
     {
@@ -131,9 +149,9 @@ export default function PaymentsPage() {
           title="Análisis de Pagos del Proyecto"
           showDatePicker={true}
           showFilters={false}
-          defaultFilters={{
-            Proyecto: project?.name ? [project.name] : [],
-          }}
+          externalFilters={externalFilters}
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
         />
       </section>
     </div>

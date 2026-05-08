@@ -47,7 +47,7 @@ export default function PlanningPage() {
   );
   const { data: project } = useFetchData<Project>("project", id);
 
-  const [zoom, setZoom] = useState<number>(100);
+  const [zoom, setZoom] = useState<number>(1000);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[]>(fetchedData || []);
@@ -165,6 +165,10 @@ export default function PlanningPage() {
     };
   }, {});
 
+  const firstTaskDate = projectTasks.length > 0 
+    ? new Date(Math.min(...projectTasks.map((t) => new Date(t.estimatedStartDate).getTime())))
+    : new Date();
+
   const sortedGroupedTasks = Object.fromEntries(
     Object.entries(groupedTaks)
       .sort(([, tasksA], [, tasksB]) => {
@@ -198,7 +202,7 @@ export default function PlanningPage() {
           <Button
             variant="secondary"
             size="icon"
-            disabled={zoom - 20 < 60 ? true : false}
+            disabled={zoom - 50 < 60 ? true : false}
             onClick={() => setZoom(zoom - 20)}
           >
             <Minus />
@@ -206,14 +210,19 @@ export default function PlanningPage() {
           <Button
             variant="secondary"
             size="icon"
-            disabled={zoom + 20 > 500 ? true : false}
+            disabled={zoom + 50 > 1500 ? true : false}
             onClick={() => setZoom(zoom + 20)}
           >
             <Plus />
           </Button>
         </nav>
       </header>
-      <GanttProvider onAddItem={handleAddTask} zoom={zoom} range="monthly">
+      {isLoading ? (
+        <div className="flex items-center justify-center h-[400px]">
+          <p className="text-muted-foreground">Cargando...</p>
+        </div>
+      ) : (
+      <GanttProvider onAddItem={handleAddTask} zoom={zoom} range="monthly" startDate={firstTaskDate}>
         <GanttSidebar>
           {Object.entries(sortedGroupedTasks).map(([group, features]) => (
             <GanttSidebarGroup key={group} name={group}>
@@ -287,6 +296,7 @@ export default function PlanningPage() {
           <GanttToday className="text-white bg-black" />
         </GanttTimeline>
       </GanttProvider>
+      )}
       <FormDialog
         title="Crear Tarea"
         schema={PlanningSchema}
